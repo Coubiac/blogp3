@@ -1,0 +1,18 @@
+{# src/OC/PlatformBundle/Resources/view/article/view.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    Lecture d'un Article - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <h2>{{ article.title }}</h2>
+    <i>le {{ article.date|date('d/m/Y') }}</i>
+
+    <div class="well">
+        {{ article.content }}
+    </div>
+
+{% endblock %}
