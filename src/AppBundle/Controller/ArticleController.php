@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\ArticleType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 
 class ArticleController extends Controller
 {
@@ -28,14 +32,16 @@ class ArticleController extends Controller
     public function addAction(Request $request)
     {
         $Article = new Article();
-        $form = $this->get('form.factory')->create(ArticleType::class, $Article);
+        $form = $this->createForm(ArticleType::class, $Article)
+            ->add('save', SubmitType::class);
+        $form->handleRequest($request);
 
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) { //Pas la bonne pratique
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($Article);
             $em->flush();
 
-            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+            $request->getSession()->getFlashbag()->add('success', 'Annonce bien enregistrée.');
 
             return $this->redirectToRoute('view_article', array('id' => $Article->getId()));
         }
@@ -51,6 +57,7 @@ class ArticleController extends Controller
     /**
      * @Route("/view/{id}", name="view_article", requirements={"id": "\d+"})
      */
+    //TODO-me mettre en place une jolie URL
     public function viewAction($id)
     {
         // On récupère le repository

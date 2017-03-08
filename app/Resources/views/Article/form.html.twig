@@ -3,7 +3,9 @@
 <h3>Formulaire d'annonce</h3>
 
 <div class="well">
-    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ tinymce_init() }}
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+    {{ form_start(form) }}
 
     {# Les erreurs générales du formulaire. #}
     {{ form_errors(form) }}
@@ -14,25 +16,26 @@
     {% endif %}
 
     {# Génération manuelle et éclatée : #}
-    <div class="form-group">
+    <div>
         {# Génération du label. #}
-        {{ form_label(form.title, "Titre du chapitre", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+        {{ form_label(form.title, "Titre du chapitre") }}
 
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.title) }}
 
-        <div class="col-sm-10">
+        <div>
             {# Génération de l'input. #}
-            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(form.title) }}
         </div>
     </div>
 
     {# Idem pour un autre champ. #}
-    <div class="form-group">
-        {{ form_label(form.content, "Contenu", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+    <div>
+        {{ form_label(form.content, "Contenu") }}
         {{ form_errors(form.content) }}
-        <div class="col-sm-10">
-            {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+        <div>
+
+            {{ form_widget(form.content) }}
         </div>
     </div>
 
@@ -43,7 +46,7 @@
 
 
     {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+    {{ form_widget(form.save) }}
 
     {# Génération automatique des champs pas encore écrits.
        Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
@@ -52,8 +55,8 @@
 
     {# Fermeture de la balise <form> du formulaire HTML #}
     {{ form_end(form) }}
-</div>
 
-{# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
-   mais si vous l'avez en local, changez simplement l'adresse. #}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    {# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
+       mais si vous l'avez en local, changez simplement l'adresse. #}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
