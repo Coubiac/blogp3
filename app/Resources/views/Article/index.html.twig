@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+    {% for article in articles %}
+
+        <div class="col-md-10 travelling1">
+            <h1><a href="{{ path('view_article', { slug: article.slug }) }}">{{ article.title }}</a></h1>
+
+            <h5><span class="metadata"><i
+                            class="fa fa-calendar"></i> {{ article.date|date('d/m/Y') }}</span>
+            </h5>
+            {{ article.resume | raw }}
+        </div>
+
+    {% endfor %}
+    {% if articles.haveToPaginate %}
+        <div class="navigation text-center">
+            {{ pagerfanta(articles, 'twitter_bootstrap3_translated', { routeName: 'home_paginated' }) }}
+        </div>
+    {% endif %}
+
+{% endblock %}

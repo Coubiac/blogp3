@@ -3,15 +3,27 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Article
  *
  * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
+ *
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
+    /**
+     * Nombres d'articles par pages
+     */
+    const NUM_ITEMS = 2;
+    /**
+     * Nombre de lettres pour le résumé
+     */
+    const NUM_CHARAC = 1500;
+
     /**
      * @var int
      *
@@ -44,11 +56,23 @@ class Article
     private $content;
 
     /**
+     * @var string
+     */
+    private $resume;
+
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="updateAt", type="datetime", nullable=true)
      */
     private $updateAt;
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -162,5 +186,52 @@ class Article
     public function getUpdateAt()
     {
         return $this->updateAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResume()
+    {
+        return $this->resume;
+    }
+
+    /**
+     *
+     * @ORM\PostLoad
+     */
+    public function setResume()
+    {
+        $resume = preg_replace('#<img(.*)>(.*) />#siU', '', $this->getContent()); // On supprime les images
+        $resume = substr(
+                $resume,
+                0,
+                Article::NUM_CHARAC
+            ).'...'; // Et on garde que le nombre de caracttères désirés ainsi que les points de suspensions
+        $this->resume = $resume;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Article
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }
