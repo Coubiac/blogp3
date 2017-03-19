@@ -56,12 +56,6 @@ class Article
     private $content;
 
     /**
-     * @var string
-     */
-    private $resume;
-
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="updateAt", type="datetime", nullable=true)
@@ -187,29 +181,6 @@ class Article
     public function getUpdateAt()
     {
         return $this->updateAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResume()
-    {
-        return $this->resume;
-    }
-
-    /**
-     *
-     * @ORM\PostLoad
-     */
-    public function setResume()
-    {
-        $resume = preg_replace('#<img(.*)>(.*) />#siU', '', $this->getContent()); // On supprime les images
-        $resume = substr(
-                $resume,
-                0,
-                Article::NUM_CHARAC
-            ).'...'; // Et on garde que le nombre de caracttères désirés ainsi que les points de suspensions
-        $this->resume = $resume;
     }
 
     /**

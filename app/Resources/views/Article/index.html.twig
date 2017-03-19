@@ -8,7 +8,7 @@
             <h5><span class="metadata"><i
                             class="fa fa-calendar"></i> {{ article.date|date('d/m/Y') }}</span>
             </h5>
-            {{ article.resume | raw }}
+            <p>{{ article.content | resume(100) }}</p>
         </div>
 
     {% endfor %}
