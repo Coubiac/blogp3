@@ -1,60 +1,71 @@
 {# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
 
 <div class="well">
-    {{ tinymce_init() }}
-    {% form_theme form 'bootstrap_3_layout.html.twig' %}
-    {{ form_start(form) }}
+    <div class="container">
+        {{ tinymce_init() }}
+        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+        {{ form_start(form) }}
 
-    {# Les erreurs générales du formulaire. #}
-    {{ form_errors(form) }}
+        {# Les erreurs générales du formulaire. #}
+        {{ form_errors(form) }}
 
-    {# Génération du label + error + widget pour un champ. #}
-    {% if form.date is defined %}
-        {{ form_row(form.date) }}
-    {% endif %}
+        {# Génération du label + error + widget pour un champ. #}
+        {% if form.date is defined %}
+            {{ form_row(form.date) }}
+        {% endif %}
 
-    {# Génération manuelle et éclatée : #}
-    <div>
-        {# Génération du label. #}
-        {{ form_label(form.title, "Titre du chapitre") }}
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.title) }}
+        {# Génération manuelle et éclatée : #}
 
         <div>
-            {# Génération de l'input. #}
-            {{ form_widget(form.title) }}
-        </div>
-    </div>
+            {# Génération du label. #}
+            {{ form_label(form.title, "Titre du chapitre") }}
 
-    {# Idem pour un autre champ. #}
-    <div>
-        {{ form_label(form.content, "Contenu") }}
-        {{ form_errors(form.content) }}
+            {# Affichage des erreurs pour ce champ précis. #}
+            {{ form_errors(form.title) }}
+
+            <div>
+                {# Génération de l'input. #}
+                {{ form_widget(form.title) }}
+            </div>
+        </div>
+
+        {# Idem pour un autre champ. #}
         <div>
+            {{ form_label(form.content, "Contenu") }}
+            {{ form_errors(form.content) }}
+            <div>
 
-            {{ form_widget(form.content) }}
+                {{ form_widget(form.content) }}
+            </div>
         </div>
+
+
+        {% if form.published is defined %}
+            {{ form_row(form.published) }}
+        {% endif %}
+
+
+        {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-floppy-disk"></i>
+                    Enregistrer
+                </button>
+
+            </div>
+        </div>
+
+
+        {# Génération automatique des champs pas encore écrits.
+           Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+           et tous les champs cachés (type « hidden »). #}
+        {{ form_rest(form) }}
+
+        {# Fermeture de la balise <form> du formulaire HTML #}
+        {{ form_end(form) }}
     </div>
+</div>
 
-
-    {% if form.published is defined %}
-        {{ form_row(form.published) }}
-    {% endif %}
-
-
-    {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-    {{ form_widget(form.save) }}
-
-    {# Génération automatique des champs pas encore écrits.
-       Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
-       et tous les champs cachés (type « hidden »). #}
-    {{ form_rest(form) }}
-
-    {# Fermeture de la balise <form> du formulaire HTML #}
-    {{ form_end(form) }}
-
-
-    {# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
-       mais si vous l'avez en local, changez simplement l'adresse. #}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+{# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
+   mais si vous l'avez en local, changez simplement l'adresse. #}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

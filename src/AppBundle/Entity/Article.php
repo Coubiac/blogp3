@@ -20,9 +20,9 @@ class Article
      */
     const NUM_ITEMS = 2;
     /**
-     * Nombre de lettres pour le résumé
+     * Nombre de Mots pour le résumé
      */
-    const NUM_CHARAC = 1500;
+    const NUM_WORDS = 150;
 
     /**
      * @var int

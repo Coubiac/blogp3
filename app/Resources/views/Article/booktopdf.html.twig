@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Billet simple pour l'alaska</title>
+</head>
+<body>
+<div style="display:flex;margin:auto;"><H1 style="align:center;">Billet simple pour l'Alaska</H1>
+    <h3 style="align:center;">par Jean Forteroche</h3></div>
+
+{% for article in listArticles %}
+
+    <page>
+        <h2>{{ article.title }}</h2>
+        <i>le {{ article.date|date('d/m/Y') }}</i>
+
+
+        {{ article.content|raw }}
+
+
+        <page_footer>
+            [[page_cu]]/[[page_nb]]
+        </page_footer>
+
+    </page>
+{% endfor %}
+</body>
+</html>

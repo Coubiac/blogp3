@@ -6,38 +6,44 @@
     Lecture d'un Article - {{ parent() }}
 {% endblock %}
 
-{% block body %}
-    {% block flash_messages %}
-        {% for type, messages in app.session.flashbag.all() %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }} alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert"><span
-                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    {{ message | raw }}
-                </div>
+    {% block body %}
+        {% block flash_messages %}
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        {{ message | raw }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        {% endblock %}
+        <div class="col-md-offset-1 col-md-10">
+
+            <h2>{{ article.title }}</h2>
+            <i>le {{ article.date|date('d/m/Y') }}</i>
+
+            <div class="well">
+                {{ article.content|raw }}
+            </div>
+            <p>
+                <a href="{{ path('home') }}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                    Retour à la liste
+                </a>
+                <a href="{{ path('edit', {'id': article.id}) }}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-edit"></i>
+                    Modifier l'article
+                </a>
+                <a href="{{ path('articletopdf', {'id': article.id}) }}" class="btn btn-default">
+                    <i class="fa fa-file-pdf-o"></i>
+                    Export PDF
+                </a>
+                <a href="{{ path('delete', {'id': article.id}) }}" class="btn btn-danger">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    Supprimer l'article
+                </a>
+            </p>
+        </div>
+
     {% endblock %}
-
-    <h2>{{ article.title }}</h2>
-    <i>le {{ article.date|date('d/m/Y') }}</i>
-
-    <div class="well">
-        {{ article.content|raw }}
-    </div>
-    <p>
-        <a href="{{ path('home') }}" class="btn btn-default">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            Retour à la liste
-        </a>
-        <a href="{{ path('edit', {'id': article.id}) }}" class="btn btn-default">
-            <i class="glyphicon glyphicon-edit"></i>
-            Modifier l'article
-        </a>
-        <a href="{{ path('delete', {'id': article.id}) }}" class="btn btn-danger">
-            <i class="glyphicon glyphicon-trash"></i>
-            Supprimer l'article
-        </a>
-    </p>
-
-{% endblock %}

@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\ArticleType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -20,11 +19,38 @@ class ArticleController extends Controller
      * @Route("/page/{page}", defaults={"_format"="html"}, requirements={"page": "[1-9]\d*"}, name="home_paginated")
      * @Method("GET")
      */
-    public function indexAction($page, $_format)
+    public function indexAction($page)
     {
-        $articles = $this->getDoctrine()->getRepository(Article::class)->findLatest($page);
+        if ($page < 1) {
+            throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+        }
 
-        return $this->render('Article/index.'.$_format.'.twig', ['articles' => $articles]);
+        //Je récupère le nombre d'articles à afficher sur une page
+        $nbPerPage = Article::NUM_ITEMS;
+
+        // On récupère notre objet Paginator
+        $listArticles = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Article')
+            ->getArticlesPaginated($page, $nbPerPage);
+
+        // On calcule le nombre total de pages grâce au count($listAdverts) qui retourne le nombre total d'annonces
+        $nbPages = ceil(count($listArticles) / $nbPerPage);
+
+        // Si la page n'existe pas, on retourne une 404
+        if ($page > $nbPages) {
+            throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+        }
+
+        // On donne toutes les informations nécessaires à la vue
+        return $this->render(
+            'Article/index.html.twig',
+            array(
+                'listArticles' => $listArticles,
+                'nbPages' => $nbPages,
+                'page' => $page,
+            )
+        );
     }
 
     /**
@@ -35,8 +61,7 @@ class ArticleController extends Controller
     public function addAction(Request $request)
     {
         $Article = new Article();
-        $form = $this->createForm(ArticleType::class, $Article)
-            ->add('save', SubmitType::class);
+        $form = $this->createForm(ArticleType::class, $Article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -64,7 +89,7 @@ class ArticleController extends Controller
     public function viewAction(Article $Article)
     {
         // $Article est donc une instance de AppBundle\Entity\Article
-        // ou null si l'id $id  n'existe pas, d'où ce if :
+        // ou null si il n'existe pas, d'où ce if :
         if (null === $Article) {
             throw new NotFoundHttpException("Cet article n'existe pas !");
         }
@@ -85,7 +110,7 @@ class ArticleController extends Controller
     public function editAction(Article $article, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createForm(ArticleType::class, $article)->add('save', SubmitType::class);
+        $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -105,10 +130,45 @@ class ArticleController extends Controller
     }
 
     /**
+     * Export Article to PDF
+     * @Route("/{id}/pdf", requirements={"id": "\d+"}, name="articletopdf")
+     */
+    public function pdfAction(Article $article)
+    {
+        $html = $this->renderView('Article/articleToPdf.html.twig', ['article' => $article,]);
+        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
+        $htmltopdf->pdf->SetDisplayMode('real');
+        $htmltopdf->writeHTML($html);
+        $htmltopdf->Output($article->getSlug().'.pdf');
+
+        return new Response();
+
+    }
+
+    /**
+     * Export Article to PDF
+     * @Route("/bookpdf", name="booktopdf")
+     */
+    public function bookToPdfAction()
+    {
+        $listArticles = $this->getDoctrine()->getManager()->getRepository('AppBundle:Article')->findAllAsc();
+        $html = $this->renderView('Article/booktopdf.html.twig', ['listArticles' => $listArticles,]);
+        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
+        $htmltopdf->pdf->SetDisplayMode('real');
+        $htmltopdf->writeHTML($html);
+        $htmltopdf->Output('billet-simple-pour-l-alaska.pdf');
+
+        return new Response();
+
+
+    }
+
+
+    /**
      * @Route("/{id}/delete", name="delete")
      *
      */
-    public function deleteAction(Request $request, Article $article)
+    public function deleteAction(Article $article)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($article);
