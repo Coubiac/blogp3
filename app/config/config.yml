@@ -38,6 +38,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        blogname: "%blogname%"
+        author: "%author%"
 
 # Doctrine Configuration
 doctrine:

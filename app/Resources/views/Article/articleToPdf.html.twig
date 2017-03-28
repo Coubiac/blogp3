@@ -8,18 +8,14 @@
 {% block body %}
 
 
-    {% for article in listArticles %}
-        <page>
-        <div class="col-md-10 travelling1">
-            <h2>{{ article.title }}</h2>
-            <h5><span class="metadata"><i class="fa fa-calendar"></i>{{ article.date|date('d/m/Y') }}</span>
-            </h5>
-            <p>{{ article.content | raw }}</p>
-        </div>
-        </page>
-    {% else %}
-        <li>Pas (encore !) d'articles</li>
-    {% endfor %}
+
+    <div class="col-md-10 travelling1">
+        <h2>{{ article.title }}</h2>
+        <h5><span class="metadata"><i class="fa fa-calendar"></i>{{ article.date|date('d/m/Y') }}</span>
+        </h5>
+        <p>{{ article.content | raw }}</p>
+    </div>
+
     <page_footer>
         [[page_cu]]/[[page_nb]]
     </page_footer>

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Billet simple pour l'alaska</title>
+    <title>{{ blogname }}</title>
 </head>
 <body>
-<div style="display:flex;margin:auto;"><H1 style="align:center;">Billet simple pour l'Alaska</H1>
-    <h3 style="align:center;">par Jean Forteroche</h3></div>
-
+<div style="display:flex;margin:auto;"><H1 style="align:center;">{{ blogname }}</H1>
+    <h3 style="align:center;">{{ author }}</h3></div>
+<page>
+</page>
 {% for article in listArticles %}
 
     <page>
+        <bookmark title="{{ article.title }}" level="0"></bookmark>
         <h2>{{ article.title }}</h2>
         <i>le {{ article.date|date('d/m/Y') }}</i>
 
