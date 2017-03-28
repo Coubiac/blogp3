@@ -137,10 +137,17 @@ class ArticleController extends Controller
      */
     public function viewAction(Article $Article)
     {
+        $listComments = $this->getDoctrine()->getRepository('AppBundle:Comment');
+        $listComments->findBy(
+            array('article' => $Article),
+            array('date' => 'desc')
+        );
+
         return $this->render(
             'article/view.html.twig',
             array(
                 'article' => $Article,
+                'listComments' => $listComments,
             )
         );
     }

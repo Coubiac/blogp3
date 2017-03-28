@@ -25,6 +25,22 @@
 
             <div class="well">
                 {{ article.content|raw }}
+
+
+            </div>
+            <div class="row">
+                <ul>
+                    {% for comment in listComments %}
+                        <div class="col-md-10 travelling1">
+                            <h1>
+                                {{ comment.author }}</h1>
+
+                            <p>{{ comment.content | resume(constant('NUM_WORDS', article)) }}</p>
+                        </div>
+                    {% else %}
+                        <li>Pas (encore !) de commentaires</li>
+                    {% endfor %}
+                </ul>
             </div>
             <p>
                 <a href="{{ path('home') }}" class="btn btn-default">
@@ -49,5 +65,7 @@
                 </a>
             </p>
         </div>
+
+
 
     {% endblock %}
