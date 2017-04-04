@@ -15,15 +15,7 @@ class ArticleType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('date')->add('title')->add(
-            'content',
-            TextareaType::class,
-            array(
-                'attr' => array(
-                    'class' => 'tinymce',
-                ),
-            )
-        );;
+        $builder->add('date')->add('title')->add('content',TextareaType::class,array('attr' => array('class' => 'tinymce',), ));
     }
 
     /**

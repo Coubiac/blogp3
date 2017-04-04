@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -20,19 +21,19 @@ class Comment
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comment", inversedBy="childs")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comment", inversedBy="childs", cascade={"remove","persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="parent", cascade={"remove","persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $childs;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="comments", cascade={"remove","persist"})
      * @ORM\JoinColumn(nullable=false)
      *
      */
@@ -69,6 +70,8 @@ class Comment
 
     /**
      * @var int
+     * @Assert\Range(min = 0, max = Comment::NUM_LEVELS)
+     *
      * @ORM\Column(name="level", type="integer")
      */
     private $level = 0;
@@ -205,7 +208,12 @@ class Comment
      */
     public function setParent(\AppBundle\Entity\Comment $parent = null)
     {
+
         $this->parent = $parent;
+        if ($parent) {
+            $this->level = $parent->getLevel() + 1;
+            $this->article = $parent->getArticle();
+        }
 
         return $this;
     }
@@ -283,18 +291,12 @@ class Comment
      * Set level
      *
      * @param integer $level
-     *
      * @return Comment
      */
     public function setLevel($level)
     {
-        if ($level >= $this::NUM_LEVELS) {
-            $this->level = $this::NUM_LEVELS;
-        } elseif ($level < 0) {
-            $this->level = 0;
-        } else {
-            $this->level = $level;
-        }
+
+        $this->level = $level;
 
         return $this;
     }

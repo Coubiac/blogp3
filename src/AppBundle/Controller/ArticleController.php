@@ -17,7 +17,7 @@ class ArticleController extends Controller
 {
 
     /**
-     * Export Article to PDF
+     * Export all articles to PDF
      * @Route("/bookpdf", name="booktopdf")
      */
     public function bookToPdfAction()
@@ -33,8 +33,10 @@ class ArticleController extends Controller
     }
 
     /**
+     * index page
+     *
      * @Route("/", defaults={"page": "1", "_format"="html"}, name="home")
-     * @Route("/page/{page}", defaults={"_format"="html"}, requirements={"page": "[1-9]\d*"}, name="home_paginated")
+     * @Route("/page/{page}", defaults={"_format"="html"}, requirements={"page": "[0-9]\d*"}, name="home_paginated")
      * @Method("GET")
      */
     public function indexAction($page)
@@ -72,6 +74,8 @@ class ArticleController extends Controller
     }
 
     /**
+     * Display form to add a NEW article
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/add", name="add")
@@ -101,6 +105,8 @@ class ArticleController extends Controller
     }
 
     /**
+     * Display form to add a NEW comment
+     *
      * @Route("/articles/{slug}/comments/add", name="addComment")
      *
      */
@@ -132,22 +138,58 @@ class ArticleController extends Controller
     }
 
     /**
-     * @Route("/artilces/{slug}", name="view_article")
+     * Display Form to reply to a comment
+     *
+     * @Route("/articles/{slug}/comment/{id}/reply", name="replyComment")
+     */
+    public function replyCommentAction(Comment $parent, Request $request)
+    {
+
+        $comment = new Comment();
+        $comment->setParent($parent);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+            $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
+
+            return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
+        }
+
+        return $this->render(
+            'Article/addComment.html.twig',
+            [
+                'article' => $comment->getArticle(),
+
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+
+    /**
+     * Display article content
+     * @Route("/article/{slug}", name="view_article")
      * @Method("GET")
      */
-    public function viewAction(Article $Article)
+    public function viewAction(Article $article)
     {
-        $listComments = $this->getDoctrine()->getRepository('AppBundle:Comment');
-        $listComments->findBy(
-            array('article' => $Article),
-            array('date' => 'desc')
+        $listeComments = $this->getDoctrine()->getRepository("AppBundle:Comment")->findBy(
+            array('article' => $article, 'level' => 0)
         );
+
 
         return $this->render(
             'article/view.html.twig',
             array(
-                'article' => $Article,
-                'listComments' => $listComments,
+                'comments' => $listeComments,
+                'article' => $article,
+
+
             )
         );
     }
@@ -197,6 +239,7 @@ class ArticleController extends Controller
 
 
     /**
+     * Delete Article
      * @Route("/{slug}/delete", name="delete")
      *
      */

@@ -13,6 +13,7 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('resume', array($this, 'resumeFilter')),
+            new \Twig_SimpleFilter('tree', array($this, 'treeFilter')),
         );
     }
 
@@ -33,4 +34,29 @@ class AppExtension extends \Twig_Extension
 
         return $retval;
     }
+
+    /**
+     * @param $parent
+     * @param $level
+     * @param $listComments
+     * @return string
+     */
+    function treeFilter($parent, $level, $listComments)
+    {
+        dump($listComments);
+        $html = "";
+        foreach ($listComments AS $comment) {
+            if ($parent == $comment->getParent()) {
+                for ($i = 0; $i < $level; $i++) {
+                    $html .= "-";
+                }
+                $html .= " <strong>".$comment->getAuthor."</strong><br>".$comment->getContent()."<br>";
+                $html .= $this->treeFilter($comment->getId(), ($level + 1), $listComments);
+            }
+        }
+
+        return $html;
+    }
+
+
 }

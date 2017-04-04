@@ -27,7 +27,7 @@ class Article
     const NUM_WORDS = 150;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="article", cascade={"remove","persist"})
      */
     private $comments;
 
