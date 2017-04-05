@@ -5,22 +5,15 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
-
-class ArticleType extends AbstractType
+class CommentType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('date', DateTimeType::class, array('required' => false,
-            'widget' =>'single_text',
-            'format' =>'dd/MM/yyyy HH:mm',
-            'attr' => array('class' => 'datetimepicker')))->add('title')->add(
-            'content',TextareaType::class,array('attr' => array('class' => 'tinymce',), ));;
+        $builder->add('author')->add('content');
     }
 
     /**
@@ -30,7 +23,7 @@ class ArticleType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'AppBundle\Entity\Article',
+                'data_class' => 'AppBundle\Entity\Comment',
             )
         );
     }
@@ -40,7 +33,7 @@ class ArticleType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_article';
+        return 'appbundle_comment';
     }
 
 

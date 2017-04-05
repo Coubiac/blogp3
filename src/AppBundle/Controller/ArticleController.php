@@ -2,21 +2,42 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Comment;
+use AppBundle\Form\CommentType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\ArticleType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 
 class ArticleController extends Controller
 {
+
     /**
+     * Export all articles to PDF
+     * @Route("/bookpdf", name="booktopdf")
+     */
+    public function bookToPdfAction()
+    {
+        $listArticles = $this->getDoctrine()->getRepository('AppBundle:Article')->findAllAsc();
+        $html = $this->renderView('Article/booktopdf.html.twig', ['listArticles' => $listArticles,]);
+        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
+        $htmltopdf->pdf->SetDisplayMode('real');
+        $htmltopdf->writeHTML($html);
+        $htmltopdf->Output('billet-simple-pour-l-alaska.pdf');
+
+        return new Response();
+    }
+
+    /**
+     * index page
+     *
      * @Route("/", defaults={"page": "1", "_format"="html"}, name="home")
-     * @Route("/page/{page}", defaults={"_format"="html"}, requirements={"page": "[1-9]\d*"}, name="home_paginated")
+     * @Route("/page/{page}", defaults={"_format"="html"}, requirements={"page": "[0-9]\d*"}, name="home_paginated")
      * @Method("GET")
      */
     public function indexAction($page)
@@ -33,6 +54,11 @@ class ArticleController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Article')
             ->getArticlesPaginated($page, $nbPerPage);
+
+        // Si il n'y a pas d'articles on renvoit vers le formulaire d'ajout
+        if (count($listArticles) < 1){
+            return $this->redirectToRoute('add');
+        }
 
         // On calcule le nombre total de pages grâce au count($listAdverts) qui retourne le nombre total d'annonces
         $nbPages = ceil(count($listArticles) / $nbPerPage);
@@ -54,6 +80,8 @@ class ArticleController extends Controller
     }
 
     /**
+     * Display form to add a NEW article
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/add", name="add")
@@ -83,21 +111,91 @@ class ArticleController extends Controller
     }
 
     /**
-     * @Route("/view/{slug}", name="view_article")
+     * Display form to add a NEW comment
+     *
+     * @Route("/articles/{slug}/comments/add", name="addComment")
+     *
+     */
+    public function addCommentAction(Article $article, Request $request)
+    {
+        $comment = new Comment();
+        $comment->setArticle($article);
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+            $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
+
+            return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+        }
+
+        return $this->render(
+            'Article/addComment.html.twig',
+            [
+                'article' => $article,
+
+                'form' => $form->createView(),
+            ]
+        );
+
+    }
+
+    /**
+     * Display Form to reply to a comment
+     *
+     * @Route("/articles/{slug}/comment/{id}/reply", name="replyComment")
+     */
+    public function replyCommentAction(Comment $parent, Request $request)
+    {
+
+        $comment = new Comment();
+        $comment->setParent($parent);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+            $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
+
+            return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
+        }
+
+        return $this->render(
+            'Article/addComment.html.twig',
+            [
+                'article' => $comment->getArticle(),
+
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+
+    /**
+     * Display article content
+     * @Route("/article/{slug}", name="view_article")
      * @Method("GET")
      */
-    public function viewAction(Article $Article)
+    public function viewAction(Article $article)
     {
-        // $Article est donc une instance de AppBundle\Entity\Article
-        // ou null si il n'existe pas, d'où ce if :
-        if (null === $Article) {
-            throw new NotFoundHttpException("Cet article n'existe pas !");
-        }
+        $listeComments = $this->getDoctrine()->getRepository("AppBundle:Comment")->findBy(
+            array('article' => $article, 'level' => 0)
+        );
+
 
         return $this->render(
             'article/view.html.twig',
             array(
-                'article' => $Article,
+                'comments' => $listeComments,
+                'article' => $article,
+
+
             )
         );
     }
@@ -105,7 +203,7 @@ class ArticleController extends Controller
     /**
      * Displays a form to edit an existing Article entity.
      *
-     * @Route("/{id}/edit", requirements={"id": "\d+"}, name="edit")
+     * @Route("/{slug}/edit", requirements={"id": "\d+"}, name="edit")
      */
     public function editAction(Article $article, Request $request)
     {
@@ -117,7 +215,7 @@ class ArticleController extends Controller
             $entityManager->flush();
             $this->addFlash('success', 'Article modifié avec succès');
 
-            return $this->redirectToRoute('edit', ['id' => $article->getId()]);
+            return $this->redirectToRoute('edit', ['slug' => $article->getSlug()]);
         }
 
         return $this->render(
@@ -131,7 +229,7 @@ class ArticleController extends Controller
 
     /**
      * Export Article to PDF
-     * @Route("/{id}/pdf", requirements={"id": "\d+"}, name="articletopdf")
+     * @Route("/{slug}/pdf", requirements={"id": "\d+"}, name="articletopdf")
      */
     public function pdfAction(Article $article)
     {
@@ -145,37 +243,31 @@ class ArticleController extends Controller
 
     }
 
-    /**
-     * Export Article to PDF
-     * @Route("/bookpdf", name="booktopdf")
-     */
-    public function bookToPdfAction()
-    {
-        $listArticles = $this->getDoctrine()->getManager()->getRepository('AppBundle:Article')->findAllAsc();
-        $html = $this->renderView('Article/booktopdf.html.twig', ['listArticles' => $listArticles,]);
-        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
-        $htmltopdf->pdf->SetDisplayMode('real');
-        $htmltopdf->writeHTML($html);
-        $htmltopdf->Output('billet-simple-pour-l-alaska.pdf');
-
-        return new Response();
-
-
-    }
-
 
     /**
-     * @Route("/{id}/delete", name="delete")
+     * Delete Article
+     * @Route("/{slug}/delete", name="delete")
      *
      */
     public function deleteAction(Article $article)
+
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($article);
-        $entityManager->flush();
+        if ($this->getDoctrine()->getRepository("AppBundle:Article")->countAll() >= 1){
+            $entityManager = $this->getDoctrine()->getManager();
 
-        $this->addFlash('success', 'Article Supprimé avec succès');
+            $entityManager->remove($article);
+            $entityManager->flush();
 
-        return $this->redirectToRoute('home');
+            $this->addFlash('success', 'Article Supprimé avec succès');
+
+            return $this->redirectToRoute('home');
+        }
+        else{
+            $this->addFlash('alert', 'Vous ne pouvez pas supprimer le dernier article !');
+
+            return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+        }
+
+
     }
 }

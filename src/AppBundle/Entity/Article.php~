@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
  *
  * @ORM\HasLifecycleCallbacks()
+ *
  */
 class Article
 {
@@ -20,9 +22,14 @@ class Article
      */
     const NUM_ITEMS = 2;
     /**
-     * Nombre de lettres pour le résumé
+     * Nombre de Mots pour le résumé
      */
-    const NUM_CHARAC = 1500;
+    const NUM_WORDS = 150;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="article")
+     */
+    private $comments;
 
     /**
      * @var int
@@ -56,12 +63,6 @@ class Article
     private $content;
 
     /**
-     * @var string
-     */
-    private $resume;
-
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="updateAt", type="datetime", nullable=true)
@@ -74,10 +75,12 @@ class Article
      */
     private $slug;
 
+
     public function __construct()
     {
         // Par défaut, la date de l'article est la date d'aujourd'hui
         $this->date = new \Datetime();
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -189,33 +192,9 @@ class Article
     }
 
     /**
-     * @return mixed
-     */
-    public function getResume()
-    {
-        return $this->resume;
-    }
-
-    /**
-     *
-     * @ORM\PostLoad
-     */
-    public function setResume()
-    {
-        $resume = preg_replace('#<img(.*)>(.*) />#siU', '', $this->getContent()); // On supprime les images
-        $resume = substr(
-                $resume,
-                0,
-                Article::NUM_CHARAC
-            ).'...'; // Et on garde que le nombre de caracttères désirés ainsi que les points de suspensions
-        $this->resume = $resume;
-    }
-
-    /**
      * Set slug
      *
      * @param string $slug
-     *
      * @return Article
      */
     public function setSlug($slug)
@@ -233,5 +212,41 @@ class Article
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return Article
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        $comment->setArticle($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

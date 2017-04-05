@@ -15,7 +15,8 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
-    author: Forteroche
+    author: Jean Forteroche
+    blogname: Billet Simple pour l'Alaska
 
 
     # A secret key that's used to generate certain security-related tokens

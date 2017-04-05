@@ -1,0 +1,25 @@
+{% macro afficherCommentaires(commentaires) %}
+    {% import _self as self %}
+    {% for comment in commentaires %}
+        <div class="catagerious" style="padding-left: 30px;">
+            <div class="col-md-4 catagerious1">
+                <div class="catagerious-left">
+                    <img src="{{ asset('images/image3.jpg') }}" class="img-responsive" alt="{{ comment.author }}"/>
+                </div>
+                <div class="catagerious-right">
+                    <h4>{{ comment.author }}</h4>
+                    <p>{{ comment.date|date("d-m-Y H:i:s") }}</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-md-7 catagerious2">
+                <h4>{{ comment.content }}</h4>
+                <h6><a href="{{ path('replyComment', {'slug': comment.article.slug, 'id': comment.id}) }}">Répondre</a>
+                </h6>
+            </div>
+            <div class="clearfix"></div>
+            {{ self.afficherCommentaires(comment.childs) }}
+        </div>
+
+    {% endfor %}
+{% endmacro %}

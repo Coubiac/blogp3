@@ -38,6 +38,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        blogname: "%blogname%"
+        author: "%author%"
 
 # Doctrine Configuration
 doctrine:
@@ -83,7 +86,7 @@ stfalcon_tinymce:
         simple:
             height: 250
             plugins:
-                - "image filemanager"
+                - "image"
 
             toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink image media"
             toolbar2: "print preview code | forecolor backcolor emoticons"

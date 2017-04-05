@@ -5,10 +5,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 
 
-    <title>{% block title %}Billet Simple pour l'Alaska{% endblock %}</title>
+    <title>{% block title %}{{ blogname }}{% endblock %}</title>
 
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -17,17 +16,15 @@
               integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
               crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script type="application/x-javascript"> addEventListener("load", function () {
-                setTimeout(hideURLbar, 0);
-            }, false);
-            function hideURLbar() {
-                window.scrollTo(0, 1);
-            } </script>
+        <link rel="stylesheet"
+              href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,800,700' rel='stylesheet'
               type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
     {% endblock %}
 </head>
 
@@ -48,35 +45,26 @@
                                 href="{{ path('home') }}">Accueil</a></li>
                     <li class="{% if app.request.attributes.get('_route') starts with 'add' %}active{% endif %}"><a
                                 href="{{ path('add') }}">Ajout</a></li>
-                    <li><a href="{{ path('booktopdf') }}" class="btn btn-default">
+                    <li><a href="{{ path('booktopdf') }}" target="_blank" class="btn btn-default">
                             <i class="fa fa-file-pdf-o"></i>
                             Télécharger le livre
                         </a></li>
 
                 </ul>
             </div>
-            <!-- script-for-nav -->
-            <script>
-                $("span.menu").click(function () {
-                    $(".head-nav ul").slideToggle(300, function () {
-                        // Animation complete.
-                    });
-                });
-            </script>
-            <!-- script-for-nav -->
+
 
         </div>
     </div>
 </div>
 
 
-<div class="container-fluid">
-    <div class="row">
-        {% block body %}
+<div class="container">
 
-        {% endblock %}
+    {% block body %}
 
-    </div>
+    {% endblock %}
+
 
 </div>
 
@@ -94,6 +82,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
+    <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+    <script>jQuery.datetimepicker.setLocale('fr');</script>
+    <script>jQuery('.datetimepicker').datetimepicker({
+            format:'d/m/Y H:i'});</script>
+    <!-- script-for-nav -->
+    <script>
+        $("span.menu").click(function () {
+            $(".head-nav ul").slideToggle(300, function () {
+                // Animation complete.
+            });
+        });
+    </script>
+    <!-- script-for-nav -->
 {% endblock %}
 
 

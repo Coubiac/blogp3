@@ -1,7 +1,7 @@
 {# src/OC/PlatformBundle/Resources/view/article/view.html.twig #}
 
 {% extends "layout.html.twig" %}
-
+{% import "Article/Macros/showComments.html.twig" as macro %}
 {% block title %}
     Lecture d'un Article - {{ parent() }}
 {% endblock %}
@@ -25,25 +25,39 @@
 
             <div class="well">
                 {{ article.content|raw }}
+
+
             </div>
+            <div>
+
+                {{ macro.afficherCommentaires(comments) }}
+
+            </div>
+
             <p>
                 <a href="{{ path('home') }}" class="btn btn-default">
                     <i class="glyphicon glyphicon-chevron-left"></i>
                     Retour à la liste
                 </a>
-                <a href="{{ path('edit', {'id': article.id}) }}" class="btn btn-default">
+                <a href="{{ path('edit', {'slug': article.slug}) }}" class="btn btn-default">
                     <i class="glyphicon glyphicon-edit"></i>
                     Modifier l'article
                 </a>
-                <a href="{{ path('articletopdf', {'id': article.id}) }}" class="btn btn-default">
+                <a href="{{ path('articletopdf', {'slug': article.slug}) }}" target="_blank" class="btn btn-default">
                     <i class="fa fa-file-pdf-o"></i>
                     Export PDF
                 </a>
-                <a href="{{ path('delete', {'id': article.id}) }}" class="btn btn-danger">
+                <a href="{{ path('addComment', {'slug': article.slug}) }}" target="_blank" class="btn btn-default">
+                    <i class="fa fa-file-pdf-o"></i>
+                    Commenter
+                </a>
+                <a href="{{ path('delete', {'slug': article.slug}) }}" class="btn btn-danger">
                     <i class="glyphicon glyphicon-trash"></i>
                     Supprimer l'article
                 </a>
             </p>
         </div>
+
+
 
     {% endblock %}

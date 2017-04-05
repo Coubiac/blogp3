@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
  *
  * @ORM\HasLifecycleCallbacks()
+ *
  */
 class Article
 {
@@ -23,6 +25,11 @@ class Article
      * Nombre de Mots pour le résumé
      */
     const NUM_WORDS = 150;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="article", cascade={"remove","persist"})
+     */
+    private $comments;
 
     /**
      * @var int
@@ -73,6 +80,7 @@ class Article
     {
         // Par défaut, la date de l'article est la date d'aujourd'hui
         $this->date = new \Datetime();
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -204,5 +212,41 @@ class Article
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return Article
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        $comment->setArticle($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
