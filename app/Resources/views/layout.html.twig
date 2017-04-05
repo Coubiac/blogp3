@@ -82,7 +82,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
     <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+    <script>jQuery.datetimepicker.setLocale('fr');</script>
+    <script>jQuery('.datetimepicker').datetimepicker({
+            format:'d/m/Y H:i'});</script>
     <!-- script-for-nav -->
     <script>
         $("span.menu").click(function () {

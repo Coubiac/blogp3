@@ -33,4 +33,11 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->findBy(array(), array('date' => 'ASC'));
     }
+
+    public function countAll(){
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

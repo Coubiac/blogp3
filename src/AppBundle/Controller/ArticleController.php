@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Comment;
 use AppBundle\Form\CommentType;
@@ -53,6 +54,11 @@ class ArticleController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Article')
             ->getArticlesPaginated($page, $nbPerPage);
+
+        // Si il n'y a pas d'articles on renvoit vers le formulaire d'ajout
+        if (count($listArticles) < 1){
+            return $this->redirectToRoute('add');
+        }
 
         // On calcule le nombre total de pages grâce au count($listAdverts) qui retourne le nombre total d'annonces
         $nbPages = ceil(count($listArticles) / $nbPerPage);
@@ -244,13 +250,24 @@ class ArticleController extends Controller
      *
      */
     public function deleteAction(Article $article)
+
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($article);
-        $entityManager->flush();
+        if ($this->getDoctrine()->getRepository("AppBundle:Article")->countAll() >= 1){
+            $entityManager = $this->getDoctrine()->getManager();
 
-        $this->addFlash('success', 'Article Supprimé avec succès');
+            $entityManager->remove($article);
+            $entityManager->flush();
 
-        return $this->redirectToRoute('home');
+            $this->addFlash('success', 'Article Supprimé avec succès');
+
+            return $this->redirectToRoute('home');
+        }
+        else{
+            $this->addFlash('alert', 'Vous ne pouvez pas supprimer le dernier article !');
+
+            return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+        }
+
+
     }
 }
