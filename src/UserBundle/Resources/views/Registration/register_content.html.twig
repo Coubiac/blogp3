@@ -1,0 +1,36 @@
+{% block body %}
+    {% block fos_user_content %}
+        <form enctype="multipart/form-data" action="{{ path('fos_user_registration_register') }}" method="POST" class="form-signin">
+            <div class="login-container" id="fos_user_registration_form">
+                <h1>Enregistrez vous !</h1><br>
+
+                <form>
+                    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'E-mail' } }) }}
+                    {{ form_errors(form.email) }}
+
+                    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'nom d\'utilisateur' } }) }}
+                    {{ form_errors(form.username) }}
+
+                    {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control', 'placeholder': 'Mot de passe' } }) }}
+                    {{ form_errors(form.plainPassword.first) }}
+
+                    {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control', 'placeholder': 'Confirmation du mot de passe' } }) }}
+                    {{ form_errors(form.plainPassword.second) }}
+
+                    {{ form_widget(form.avatar)}}
+
+
+
+
+
+                    {{ form_rest(form) }}
+                    <input class="login login-submit" type="submit" value="{{ 'Enregistrer' }}">
+                </form>
+            </div>
+            <div>
+
+            </div>
+        </form>
+    {% endblock fos_user_content %}
+
+{% endblock %}

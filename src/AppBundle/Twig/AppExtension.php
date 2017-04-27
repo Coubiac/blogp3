@@ -5,6 +5,7 @@
  * Date: 19/03/2017
  * Time: 18:07
  */
+
 namespace AppBundle\Twig;
 
 class AppExtension extends \Twig_Extension
@@ -13,7 +14,6 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('resume', array($this, 'resumeFilter')),
-            new \Twig_SimpleFilter('tree', array($this, 'treeFilter')),
         );
     }
 
@@ -28,35 +28,17 @@ class AppExtension extends \Twig_Extension
             $retval = $string;
         } // Sinon on garde que le nombre de mots désirés.
         else {
+            //la fonction array_splice permet de ne garder que les X premières valeurs du tableau
             array_splice($array, $wordsreturned);
-            $retval = implode(" ", $array)." ...";
+            //On crée une chaine avec toutes les valeurs du tableau séparées par un espace
+            $retval = implode(" ", $array) . " ...";
         }
 
         return $retval;
     }
-
-    /**
-     * @param $parent
-     * @param $level
-     * @param $listComments
-     * @return string
-     */
-    function treeFilter($parent, $level, $listComments)
+    public function getName()
     {
-        dump($listComments);
-        $html = "";
-        foreach ($listComments AS $comment) {
-            if ($parent == $comment->getParent()) {
-                for ($i = 0; $i < $level; $i++) {
-                    $html .= "-";
-                }
-                $html .= " <strong>".$comment->getAuthor."</strong><br>".$comment->getContent()."<br>";
-                $html .= $this->treeFilter($comment->getId(), ($level + 1), $listComments);
-            }
-        }
-
-        return $html;
+        return 'AppExtension';
     }
-
 
 }

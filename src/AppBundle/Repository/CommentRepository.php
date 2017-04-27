@@ -2,8 +2,6 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Article;
-
 /**
  * CommentRepository
  *
@@ -12,5 +10,17 @@ use AppBundle\Entity\Article;
  */
 class CommentRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findSignaled()
+    {
+        return $this->findBy(array(), array('signaled' => 'true'));
+    }
+
+    public function myfindAll()
+    {
+        $query = $this->_em->createQuery('SELECT c FROM AppBundle:Comment c ORDER BY c.signaled DESC, c.date DESC');
+
+        $results = $query->getResult();
+        return $results;
+    }
 
 }

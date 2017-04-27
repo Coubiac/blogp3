@@ -27,7 +27,7 @@ class Article
     const NUM_WORDS = 150;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="article", cascade={"remove","persist"})
      */
     private $comments;
 
@@ -95,6 +95,16 @@ class Article
     }
 
     /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
      * Set date
      *
      * @param \DateTime $date
@@ -109,13 +119,13 @@ class Article
     }
 
     /**
-     * Get date
+     * Get title
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getDate()
+    public function getTitle()
     {
-        return $this->date;
+        return $this->title;
     }
 
     /**
@@ -133,15 +143,14 @@ class Article
     }
 
     /**
-     * Get title
+     * Get content
      *
      * @return string
      */
-    public function getTitle()
+    public function getContent()
     {
-        return $this->title;
+        return $this->content;
     }
-
 
     /**
      * Set content
@@ -158,13 +167,13 @@ class Article
     }
 
     /**
-     * Get content
+     * Get updateAt
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getContent()
+    public function getUpdateAt()
     {
-        return $this->content;
+        return $this->updateAt;
     }
 
     /**
@@ -182,13 +191,13 @@ class Article
     }
 
     /**
-     * Get updateAt
+     * Get slug
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getUpdateAt()
+    public function getSlug()
     {
-        return $this->updateAt;
+        return $this->slug;
     }
 
     /**
@@ -202,16 +211,6 @@ class Article
         $this->slug = $slug;
 
         return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**

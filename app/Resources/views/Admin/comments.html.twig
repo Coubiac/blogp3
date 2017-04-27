@@ -1,0 +1,33 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+    <div id="commenttab" class="table-responsive">
+    <table class="table table-hover" id="myTable">
+                <thead>
+                <tr>
+                    <th>Signalements</th>
+                    <th>Date</th>
+                    <th>Article</th>
+                    <th>Utilisateur</th>
+                    <th>Commentaire</th>
+                    <th>Supprimer</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for comment in listComments %}
+                    <tr {% if comment.signaled == true %}class="danger" {% endif %}>
+                        <td>{% if comment.signaled == true %}<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color: red;"></i> {{ comment.signaled }}{% else %}<i class="fa fa-check" aria-hidden="true" style="color: green;"></i> {{ comment.signaled }}{% endif %}
+
+                    </td>
+                        <td>{{ comment.date|date("d-m-Y H:i:s") }}</td>
+                        <td>{{ comment.article.title }}</td>
+                        <td>{{ comment.author.username }}</td>
+                        <td>{{ comment.content }}</td>
+                        <td>
+                            <a href="{{ path('deleteComment', {'id': comment.id}) }}" class="btn btn-danger" role="button" data-confirm="Etes-vous certain de vouloir supprimer ce commentaire ?"><i class="glyphicon glyphicon-trash"></i> Supprimer</a>
+                        </td>
+                    </tr>
+                 {% endfor %}
+                </tbody>
+            </table>
+    </div>
+{% endblock %}

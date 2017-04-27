@@ -1,0 +1,18 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+
+    <div class="row">
+        <ul>
+            {% for user in listUsers %}
+                <div class="col-md-10 travelling1">
+
+                    <li>{{ user.username }} - {{ user.email }} - <a
+                                href="{{ path('deleteUser', {'username': user.username}) }}">Supprimer</a></li>
+
+                </div>
+            {% else %}
+                <li>Pas (encore !) de d'utilisateurs</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

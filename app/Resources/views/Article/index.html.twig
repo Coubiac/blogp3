@@ -30,7 +30,8 @@
                 </li>
             {% endfor %}
             <li>
-                <a href="{% if page < nbPages %}{{ path('home_paginated', {'page': page + 1}) }}{% endif %}"> &rang; </a>
+                <a href="{% if page < nbPages %}{{ path('home_paginated', {'page': page + 1}) }}{% endif %}">
+                    &rang; </a>
             </li>
 
 
