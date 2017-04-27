@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * Comment
+ * Admin
  *
  * @ORM\Table(name="comment")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommentRepository")
@@ -21,7 +21,7 @@ class Comment
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comment", inversedBy="childs", cascade={"remove","persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comment", inversedBy="childs")
      * @ORM\JoinColumn(nullable=true)
      */
     private $parent;
@@ -33,7 +33,7 @@ class Comment
     private $childs;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="comments", cascade={"remove","persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Article", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      *
      */
@@ -49,9 +49,9 @@ class Comment
     private $id;
 
     /**
-     * @var string
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
      *
-     * @ORM\Column(name="author", type="string", length=255)
      */
     private $author;
 
@@ -64,9 +64,9 @@ class Comment
 
     /**
      * @var boolean
-     * @ORM\Column(name="signaled", type="boolean")
+     * @ORM\Column(name="signaled", type="integer")
      */
-    private $signaled = false;
+    private $signaled = 0;
 
     /**
      * @var int
@@ -74,7 +74,7 @@ class Comment
      *
      * @ORM\Column(name="level", type="integer")
      */
-    private $level = 0;
+    private $level = 1;
 
     /**
      * @var string
@@ -83,6 +83,14 @@ class Comment
      */
     private $content;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->childs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->date = new \Datetime();
+    }
 
     /**
      * Get id
@@ -92,6 +100,16 @@ class Comment
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get author
+     *
+     * @return string
+     */
+    public function getAuthor()
+    {
+        return $this->author;
     }
 
     /**
@@ -109,13 +127,13 @@ class Comment
     }
 
     /**
-     * Get author
+     * Get date
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getAuthor()
+    public function getDate()
     {
-        return $this->author;
+        return $this->date;
     }
 
     /**
@@ -133,13 +151,13 @@ class Comment
     }
 
     /**
-     * Get date
+     * Get content
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getDate()
+    public function getContent()
     {
-        return $this->date;
+        return $this->content;
     }
 
     /**
@@ -157,13 +175,13 @@ class Comment
     }
 
     /**
-     * Get content
+     * Get article
      *
-     * @return string
+     * @return \AppBundle\Entity\Article
      */
-    public function getContent()
+    public function getArticle()
     {
-        return $this->content;
+        return $this->article;
     }
 
     /**
@@ -181,22 +199,13 @@ class Comment
     }
 
     /**
-     * Get article
+     * Get parent
      *
-     * @return \AppBundle\Entity\Article
+     * @return \AppBundle\Entity\Comment
      */
-    public function getArticle()
+    public function getParent()
     {
-        return $this->article;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->childs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->date = new \Datetime();
+        return $this->parent;
     }
 
     /**
@@ -216,16 +225,6 @@ class Comment
         }
 
         return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \AppBundle\Entity\Comment
-     */
-    public function getParent()
-    {
-        return $this->parent;
     }
 
     /**
@@ -264,9 +263,19 @@ class Comment
     }
 
     /**
+     * Get signaled
+     *
+     * @return integer
+     */
+    public function getSignaled()
+    {
+        return $this->signaled;
+    }
+
+    /**
      * Set signaled
      *
-     * @param boolean $signaled
+     * @param integer $signaled
      *
      * @return Comment
      */
@@ -278,13 +287,13 @@ class Comment
     }
 
     /**
-     * Get signaled
+     * Get level
      *
-     * @return boolean
+     * @return integer
      */
-    public function getSignaled()
+    public function getLevel()
     {
-        return $this->signaled;
+        return $this->level;
     }
 
     /**
@@ -299,15 +308,5 @@ class Comment
         $this->level = $level;
 
         return $this;
-    }
-
-    /**
-     * Get level
-     *
-     * @return integer
-     */
-    public function getLevel()
-    {
-        return $this->level;
     }
 }

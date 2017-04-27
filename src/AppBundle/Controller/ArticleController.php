@@ -2,20 +2,26 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\AppBundle;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Comment;
-use AppBundle\Form\CommentType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\ArticleType;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends Controller
 {
+
+
+    /**
+     *--------------------------------------------------------------------------------------------------------------
+     *==============   FONCTIONS PDF   =============================================================================
+     * -------------------------------------------------------------------------------------------------------------
+     */
 
     /**
      * Export all articles to PDF
@@ -33,6 +39,29 @@ class ArticleController extends Controller
         return new Response();
     }
 
+
+    /**
+     * Export Article to PDF
+     * @Route("/{slug}/pdf", requirements={"id": "\d+"}, name="articletopdf")
+     */
+    public function pdfAction(Article $article)
+    {
+        $html = $this->renderView('Article/articleToPdf.html.twig', ['article' => $article,]);
+        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
+        $htmltopdf->pdf->SetDisplayMode('real');
+        $htmltopdf->writeHTML($html);
+        $htmltopdf->Output($article->getSlug() . '.pdf');
+
+        return new Response();
+
+    }
+
+    /**
+     *--------------------------------------------------------------------------------------------------------------
+     *==============   GESTION DES ARTICLES   ======================================================================
+     * -------------------------------------------------------------------------------------------------------------
+     */
+
     /**
      * index page
      *
@@ -43,29 +72,27 @@ class ArticleController extends Controller
     public function indexAction($page)
     {
         if ($page < 1) {
-            throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+            throw $this->createNotFoundException("La page " . $page . " n'existe pas.");
         }
 
-        //Je récupère le nombre d'articles à afficher sur une page
-        $nbPerPage = Article::NUM_ITEMS;
 
         // On récupère notre objet Paginator
         $listArticles = $this->getDoctrine()
             ->getManager()
             ->getRepository('AppBundle:Article')
-            ->getArticlesPaginated($page, $nbPerPage);
+            ->getArticlesPaginated($page);
 
         // Si il n'y a pas d'articles on renvoit vers le formulaire d'ajout
-        if (count($listArticles) < 1){
+        if (count($listArticles) < 1) {
             return $this->redirectToRoute('add');
         }
 
         // On calcule le nombre total de pages grâce au count($listAdverts) qui retourne le nombre total d'annonces
-        $nbPages = ceil(count($listArticles) / $nbPerPage);
+        $nbPages = ceil(count($listArticles) / Article::NUM_ITEMS);
 
         // Si la page n'existe pas, on retourne une 404
         if ($page > $nbPages) {
-            throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+            throw $this->createNotFoundException("La page " . $page . " n'existe pas.");
         }
 
         // On donne toutes les informations nécessaires à la vue
@@ -83,6 +110,7 @@ class ArticleController extends Controller
      * Display form to add a NEW article
      *
      * @param Request $request
+     * @Security("has_role('ROLE_ADMIN')")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/add", name="add")
      */
@@ -111,73 +139,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display form to add a NEW comment
-     *
-     * @Route("/articles/{slug}/comments/add", name="addComment")
-     *
-     */
-    public function addCommentAction(Article $article, Request $request)
-    {
-        $comment = new Comment();
-        $comment->setArticle($article);
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
-            $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
-
-            return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
-        }
-
-        return $this->render(
-            'Article/addComment.html.twig',
-            [
-                'article' => $article,
-
-                'form' => $form->createView(),
-            ]
-        );
-
-    }
-
-    /**
-     * Display Form to reply to a comment
-     *
-     * @Route("/articles/{slug}/comment/{id}/reply", name="replyComment")
-     */
-    public function replyCommentAction(Comment $parent, Request $request)
-    {
-
-        $comment = new Comment();
-        $comment->setParent($parent);
-
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
-            $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
-
-            return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
-        }
-
-        return $this->render(
-            'Article/addComment.html.twig',
-            [
-                'article' => $comment->getArticle(),
-
-                'form' => $form->createView(),
-            ]
-        );
-    }
-
-
-    /**
      * Display article content
      * @Route("/article/{slug}", name="view_article")
      * @Method("GET")
@@ -185,7 +146,7 @@ class ArticleController extends Controller
     public function viewAction(Article $article)
     {
         $listeComments = $this->getDoctrine()->getRepository("AppBundle:Comment")->findBy(
-            array('article' => $article, 'level' => 0)
+            array('article' => $article, 'level' => 1)
         );
 
 
@@ -202,11 +163,12 @@ class ArticleController extends Controller
 
     /**
      * Displays a form to edit an existing Article entity.
-     *
+     * @Security("has_role('ROLE_ADMIN')")
      * @Route("/{slug}/edit", requirements={"id": "\d+"}, name="edit")
      */
     public function editAction(Article $article, Request $request)
     {
+        $referer = $request->headers->get('referer');
         $entityManager = $this->getDoctrine()->getManager();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -214,8 +176,8 @@ class ArticleController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $this->addFlash('success', 'Article modifié avec succès');
-
-            return $this->redirectToRoute('edit', ['slug' => $article->getSlug()]);
+            return $this->redirect($referer);
+            //return $this->redirectToRoute('edit', ['slug' => $article->getSlug()]);
         }
 
         return $this->render(
@@ -227,32 +189,20 @@ class ArticleController extends Controller
         );
     }
 
-    /**
-     * Export Article to PDF
-     * @Route("/{slug}/pdf", requirements={"id": "\d+"}, name="articletopdf")
-     */
-    public function pdfAction(Article $article)
-    {
-        $html = $this->renderView('Article/articleToPdf.html.twig', ['article' => $article,]);
-        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
-        $htmltopdf->pdf->SetDisplayMode('real');
-        $htmltopdf->writeHTML($html);
-        $htmltopdf->Output($article->getSlug().'.pdf');
-
-        return new Response();
-
-    }
-
 
     /**
      * Delete Article
      * @Route("/{slug}/delete", name="delete")
+     * @Security("has_role('ROLE_ADMIN')")
      *
      */
-    public function deleteAction(Article $article)
+    public function deleteAction(Article $article, Request $request)
 
     {
-        if ($this->getDoctrine()->getRepository("AppBundle:Article")->countAll() >= 1){
+        $referer = $request->headers->get('referer');
+
+        if ($this->getDoctrine()->getRepository("AppBundle:Article")->countAll() > 1) {
+
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->remove($article);
@@ -260,14 +210,142 @@ class ArticleController extends Controller
 
             $this->addFlash('success', 'Article Supprimé avec succès');
 
-            return $this->redirectToRoute('home');
-        }
-        else{
+            if ($referer == $this->get('router')->generate('view_article', array('slug' => $article->getSlug())))
+            {
+                return $this->redirectToRoute('home');
+            }
+            else{
+                return $this->redirect($referer);
+            }
+
+
+
+        } else {
             $this->addFlash('alert', 'Vous ne pouvez pas supprimer le dernier article !');
 
-            return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+            return $this->redirect($referer);
+            //return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
         }
 
 
     }
+
+    /**
+     *--------------------------------------------------------------------------------------------------------------
+     *==============   GESTION DES COMMENTAIRES   ==================================================================
+     * -------------------------------------------------------------------------------------------------------------
+     */
+
+
+    /**
+     * Display form to add a NEW comment
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/articles/{slug}/comments/add", name="addComment")
+     *
+     */
+    public function addCommentAction(Article $article, Request $request)
+    {
+        $comment = new Comment();
+        $comment->setArticle($article);
+        $comment->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+        $form = $this->createForm(CommentType::class, $comment, array(
+            'action' => $this->generateUrl('addComment', array(
+                'slug' => $article->getSlug()))));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $checkAntispam = $this->get('app.antispam')->isSpam($comment->getContent());
+            if ($checkAntispam['spam']) {
+                $request->getSession()->getFlashbag()->add('danger', $checkAntispam['message']);
+                return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+
+            } else {
+
+                $comment->setContent($checkAntispam['content']);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($comment);
+                $em->flush();
+                $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
+
+                return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+            }
+        }
+
+        return $this->render(
+            'Article/commentForm.html.twig',
+            [
+                'article' => $article,
+
+                'form' => $form->createView(),
+            ]
+        );
+
+    }
+
+    /**
+     * Display Form to reply to a comment
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/articles/{slug}/comment/{id}/reply", name="replyComment")
+     */
+    public function replyCommentAction(Comment $parent, Request $request)
+    {
+
+        $comment = new Comment();
+        $comment->setParent($parent);
+        $comment->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+        $comment->setArticle($parent->getArticle());
+
+        $form = $this->createForm(CommentType::class, $comment, array(
+            'action' => $this->generateUrl('replyComment', array(
+                'slug' => $comment->getArticle()->getSlug(),
+                'id' => $parent->getId()))));
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $checkAntispam = $this->get('app.antispam')->isSpam($comment->getContent());
+            if ($checkAntispam['spam']) {
+                $request->getSession()->getFlashbag()->add('danger', $checkAntispam['message']);
+                return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+
+            } else {
+
+                $comment->setContent($checkAntispam['content']);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($comment);
+                $em->flush();
+                $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
+
+                return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
+            }
+        }
+
+        return $this->render(
+            'Article/commentForm.html.twig',
+            [
+                'article' => $comment->getArticle(),
+
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * Signal a Admin
+     * @Route("articles/{slug}/comment/{id}/signal", name="signalComment")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function signalComment(Comment $comment, Request $request)
+    {
+        $nbSignaled = $comment->getSignaled();
+        $nbSignaled++;
+        $comment->setSignaled($nbSignaled);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($comment);
+        $em->flush();
+        $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
+        return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
+    }
+
+
 }

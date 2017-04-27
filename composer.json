@@ -31,7 +31,10 @@
     "twig/twig": "^1.0||^2.0",
     "stfalcon/tinymce-bundle": "~2.0",
     "stof/doctrine-extensions-bundle": "^1.2",
-    "ensepar/html2pdf-bundle": "^3.0"
+    "ensepar/html2pdf-bundle": "^3.0",
+    "friendsofsymfony/user-bundle": "dev-master",
+    "symfony/options-resolver": "^3.2",
+    "knplabs/knp-time-bundle": "^1.7"
   },
   "require-dev": {
     "sensio/generator-bundle": "^3.0",

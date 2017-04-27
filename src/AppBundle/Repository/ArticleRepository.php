@@ -9,21 +9,22 @@ namespace AppBundle\Repository;
  * repository methods below.
  */
 
+use AppBundle\Entity\Article;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 
 class ArticleRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getArticlesPaginated($page, $nbPerPage)
+    public function getArticlesPaginated($page)
     {
         $qb = $this->createQueryBuilder('a')->where('a.date <= :now')->setParameter(':now', new \DateTime());
         $query = $qb->getQuery();
         $query
             // On définit l'annonce à partir de laquelle commencer la liste
-            ->setFirstResult(($page - 1) * $nbPerPage)
+            ->setFirstResult(($page - 1) * Article::NUM_ITEMS)
             // Ainsi que le nombre d'annonce à afficher sur une page
-            ->setMaxResults($nbPerPage);
+            ->setMaxResults(Article::NUM_ITEMS);
         // Enfin, on retourne l'objet Paginator correspondant à la requête construite
         // (n'oubliez pas le use correspondant en début de fichier)
         return new Paginator($query, true);
@@ -34,7 +35,8 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
         return $this->findBy(array(), array('date' => 'ASC'));
     }
 
-    public function countAll(){
+    public function countAll()
+    {
         return $this->createQueryBuilder('a')
             ->select('COUNT(a)')
             ->getQuery()

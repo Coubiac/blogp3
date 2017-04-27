@@ -3,10 +3,10 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 
 class ArticleType extends AbstractType
@@ -16,11 +16,9 @@ class ArticleType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('date', DateTimeType::class, array('required' => false,
-            'widget' =>'single_text',
-            'format' =>'dd/MM/yyyy HH:mm',
-            'attr' => array('class' => 'datetimepicker')))->add('title')->add(
-            'content',TextareaType::class,array('attr' => array('class' => 'tinymce',), ));;
+        $builder->add('date', DatePickerType::class)
+                ->add('title')
+                ->add('content', TinyMCEType::class);;
     }
 
     /**

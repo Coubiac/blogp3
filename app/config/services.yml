@@ -12,3 +12,12 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+
+
+    app.form.registration:
+        class: UserBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+
+    app.antispam:
+        class: AppBundle\Antispam\Antispam

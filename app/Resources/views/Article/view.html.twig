@@ -7,57 +7,60 @@
 {% endblock %}
 
     {% block body %}
-        {% block flash_messages %}
-            {% for type, messages in app.session.flashbag.all() %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ type }} alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert"><span
-                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        {{ message | raw }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        {% endblock %}
-        <div class="col-md-offset-1 col-md-10">
 
-            <h2>{{ article.title }}</h2>
-            <i>le {{ article.date|date('d/m/Y') }}</i>
+        <div class="content">
 
-            <div class="well">
+            <div class="travelling">
+                <div class="col-md-10 travelling1">
+                    <h1>{{ article.title }}</h1>
+                    <h5>le {{ article.date|date('d/m/Y') }}</h5>
+                </div>
+                <div class="col-md-1 travelling2">
+                    <h3> {{ article.comments|length }}</h3>
+                    <span>commentaires</span>
+                </div>
+            </div>
+
+            <div class="travelling">
                 {{ article.content|raw }}
 
 
             </div>
+
+
+
+
+
+
             <div>
-
-                {{ macro.afficherCommentaires(comments) }}
-
-            </div>
-
-            <p>
                 <a href="{{ path('home') }}" class="btn btn-default">
                     <i class="glyphicon glyphicon-chevron-left"></i>
                     Retour à la liste
                 </a>
-                <a href="{{ path('edit', {'slug': article.slug}) }}" class="btn btn-default">
-                    <i class="glyphicon glyphicon-edit"></i>
-                    Modifier l'article
-                </a>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('edit', {'slug': article.slug}) }}" class="btn btn-default">
+                        <i class="glyphicon glyphicon-edit"></i>
+                        Modifier l'article
+                    </a>
+                {% endif %}
                 <a href="{{ path('articletopdf', {'slug': article.slug}) }}" target="_blank" class="btn btn-default">
                     <i class="fa fa-file-pdf-o"></i>
                     Export PDF
                 </a>
-                <a href="{{ path('addComment', {'slug': article.slug}) }}" target="_blank" class="btn btn-default">
-                    <i class="fa fa-file-pdf-o"></i>
-                    Commenter
-                </a>
-                <a href="{{ path('delete', {'slug': article.slug}) }}" class="btn btn-danger">
-                    <i class="glyphicon glyphicon-trash"></i>
-                    Supprimer l'article
-                </a>
-            </p>
+                {% if is_granted('ROLE_USER') %}
+                    <a href="{{ path('addComment', {'slug': article.slug}) }}" target="_blank" class="btn btn-default openmodal">
+                        <i class="fa fa-comment"></i>
+                        Commenter
+                    </a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('delete', {'slug': article.slug}) }}" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        Supprimer l'article
+                    </a>
+                {% endif %}
+            </div>
+            {{ macro.afficherCommentaires(comments) }}
         </div>
-
-
-
     {% endblock %}
