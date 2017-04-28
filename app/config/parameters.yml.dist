@@ -21,4 +21,4 @@ parameters:
 
 
     # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            65c40daab028caf7ddf243bfd49e317c8261e593
