@@ -80,6 +80,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 }
 .confirmation-container a{
     color: #fff;
+    opacity: 1;
 }
 h4, h5, h6,
 h1, h2, h3 {
