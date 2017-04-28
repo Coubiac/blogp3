@@ -1,19 +1,24 @@
 <?php
 
-namespace AppBundle\Form\Comment;
+namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Form\Type\DatePickerType;
+use AppBundle\Form\Type\TinyMCEType;
 
-class CommentType extends AbstractType
+
+class ArticleType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('content');
+        $builder->add('date', DatePickerType::class)
+                ->add('title')
+                ->add('content', TinyMCEType::class);;
     }
 
     /**
@@ -23,7 +28,7 @@ class CommentType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'AppBundle\Entity\Comment',
+                'data_class' => 'AppBundle\Entity\Article',
             )
         );
     }
@@ -33,7 +38,7 @@ class CommentType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_comment';
+        return 'appbundle_article';
     }
 
 
