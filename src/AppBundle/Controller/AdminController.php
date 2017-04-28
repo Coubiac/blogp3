@@ -27,7 +27,7 @@ class AdminController extends Controller
     /**
      * Delete Comments
      * @Route("/admin/{id}/delete", name="deleteComment")
-     * @Method("POST")
+     * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteComment(Comment $comment)
@@ -57,7 +57,7 @@ class AdminController extends Controller
      * Delete Users
      *
      * @Route("/admin/users/{username}/delete", name="deleteUser")
-     * @Method("POST")
+     * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteUser(User $user)
