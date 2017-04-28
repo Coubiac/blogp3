@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 
 class AdminController extends Controller
@@ -14,6 +15,7 @@ class AdminController extends Controller
     /**
      * View all Comments
      * @Route("/admin/comments", name="adminComments")
+     * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function viewComments()
@@ -25,6 +27,7 @@ class AdminController extends Controller
     /**
      * Delete Comments
      * @Route("/admin/{id}/delete", name="deleteComment")
+     * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteComment(Comment $comment)
@@ -40,6 +43,7 @@ class AdminController extends Controller
      * View all Users
      *
      * @Route("/admin/users", name="adminUsers")
+     * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function viewUsers()
@@ -53,6 +57,7 @@ class AdminController extends Controller
      * Delete Users
      *
      * @Route("/admin/users/{username}/delete", name="deleteUser")
+     * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteUser(User $user)
@@ -67,6 +72,7 @@ class AdminController extends Controller
     /**
      * view all articles
      * @Route("/admin/articles", name="adminArticles")
+     * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function viewArticles()
