@@ -18,7 +18,7 @@ class AdminController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function viewComments()
+    public function viewCommentsAction()
     {
         $listcomments = $this->getDoctrine()->getRepository("AppBundle:Comment")->findAll();
         return $this->render('Admin/comments.html.twig', array('listComments' => $listcomments,));
@@ -30,7 +30,7 @@ class AdminController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function deleteComment(Comment $comment)
+    public function deleteCommentAction(Comment $comment)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -46,7 +46,7 @@ class AdminController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function viewUsers()
+    public function viewUsersAction()
     {
         $userManager = $this->get('fos_user.user_manager');
         $listUsers = $userManager->findUsers();
@@ -60,7 +60,7 @@ class AdminController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function deleteUser(User $user)
+    public function deleteUserAction(User $user)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($user);
@@ -75,7 +75,7 @@ class AdminController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function viewArticles()
+    public function viewArticlesAction()
     {
         $listArticles = $this->getDoctrine()->getRepository("AppBundle:Article")->findAll();
         return $this->render('Admin/articles.html.twig', array('listArticles' => $listArticles));

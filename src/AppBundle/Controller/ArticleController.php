@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Comment;
-use AppBundle\Form\ArticleType;
-use AppBundle\Form\CommentType;
+use AppBundle\Form\Article\ArticleType;
+use AppBundle\Form\Comment\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -246,8 +246,7 @@ class ArticleController extends Controller
     public function addCommentAction(Article $article, Request $request)
     {
         $comment = new Comment();
-        $comment->setArticle($article);
-        $comment->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+        $comment->setArticle($article)->setAuthor($this->get('security.token_storage')->getToken()->getUser());
         $form = $this->createForm(CommentType::class, $comment, array(
             'action' => $this->generateUrl('addComment', array(
                 'slug' => $article->getSlug()))));
@@ -290,11 +289,14 @@ class ArticleController extends Controller
      */
     public function replyCommentAction(Comment $parent, Request $request)
     {
-
         $comment = new Comment();
-        $comment->setParent($parent);
-        $comment->setAuthor($this->get('security.token_storage')->getToken()->getUser());
-        $comment->setArticle($parent->getArticle());
+        $comment
+            ->setParent($parent)
+            ->setAuthor($this
+                ->get('security.token_storage')
+                ->getToken()->getUser())
+            ->setArticle($parent->getArticle());
+
 
         $form = $this->createForm(CommentType::class, $comment, array(
             'action' => $this->generateUrl('replyComment', array(
@@ -309,22 +311,18 @@ class ArticleController extends Controller
                 return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
 
             } else {
-
                 $comment->setContent($checkAntispam['content']);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($comment);
                 $em->flush();
                 $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
-
                 return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
             }
         }
-
         return $this->render(
             'Article/commentForm.html.twig',
             [
                 'article' => $comment->getArticle(),
-
                 'form' => $form->createView(),
             ]
         );
@@ -335,7 +333,7 @@ class ArticleController extends Controller
      * @Route("articles/{slug}/comment/{id}/signal", name="signalComment")
      * @Security("has_role('ROLE_USER')")
      */
-    public function signalComment(Comment $comment, Request $request)
+    public function signalCommentAction(Comment $comment, Request $request)
     {
         $nbSignaled = $comment->getSignaled();
         $nbSignaled++;
