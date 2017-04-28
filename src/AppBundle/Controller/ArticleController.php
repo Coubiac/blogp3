@@ -177,7 +177,7 @@ class ArticleController extends Controller
             $entityManager->flush();
             $this->addFlash('success', 'Article modifié avec succès');
             return $this->redirect($referer);
-            //return $this->redirectToRoute('edit', ['slug' => $article->getSlug()]);
+
         }
 
         return $this->render(
@@ -224,7 +224,7 @@ class ArticleController extends Controller
             $this->addFlash('alert', 'Vous ne pouvez pas supprimer le dernier article !');
 
             return $this->redirect($referer);
-            //return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+
         }
 
 
@@ -306,7 +306,7 @@ class ArticleController extends Controller
             $checkAntispam = $this->get('app.antispam')->isSpam($comment->getContent());
             if ($checkAntispam['spam']) {
                 $request->getSession()->getFlashbag()->add('danger', $checkAntispam['message']);
-                return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
+                return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
 
             } else {
 

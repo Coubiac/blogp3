@@ -40,7 +40,7 @@ class Avatar
     private $alt;
 
     /**
-     * @Assert\File(maxSize="300k",
+     * @Assert\File(maxSize="100k",
      *     mimeTypes = {"image/jpeg", "image/png", "image/gif", "image/x-ms-bmp"},
      *     mimeTypesMessage = "SVP, insérez une image valide")
      */
@@ -185,7 +185,7 @@ class Avatar
             $this->getUploadRootDir(), // Le répertoire de destination
             $this->getId().'.'.$this->extension   // Le nom du fichier à créer, ici « id.extension »
         );
-        //$this->setUrl($this->getUploadRootDir().$this->getId().'.'.$this->extension);
+
 
     }
 
