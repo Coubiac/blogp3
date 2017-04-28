@@ -2,7 +2,7 @@
 
 namespace AppBundle\Antispam;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 Class Antispam
 {

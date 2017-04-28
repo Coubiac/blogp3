@@ -1,5 +1,6 @@
 {
-  "name": "blogp3",
+  "name": "begr/blogp3",
+  "description": "Blog pour le projet 3 Openclassrooms",
   "license": "proprietary",
   "type": "project",
   "autoload": {
@@ -66,6 +67,6 @@
     "incenteev-parameters": {
       "file": "app/config/parameters.yml"
     },
-    "branch-alias": null
+    "branch-alias": "null"
   }
 }
