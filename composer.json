@@ -6,8 +6,8 @@
   "autoload": {
     "psr-4": {
       "": "src/",
-      "AppBundle": "src/AppBundle",
-      "UserBundle": "src/UserBundle"
+      "AppBundle": "src/AppBundle/",
+      "UserBundle": "src/UserBundle/"
 
     },
     "classmap": [
