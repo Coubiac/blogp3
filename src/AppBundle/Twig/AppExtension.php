@@ -17,7 +17,7 @@ class AppExtension extends \Twig_Extension
         );
     }
 
-    function resumeFilter($string, $wordsreturned = 100)
+    public function resumeFilter($string, $wordsreturned = 100)
     {
         //On supprime les balises html de la chaine
         $string = strip_tags($string);
