@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SensioLabsInsightAnalysisStorage">
+    <option name="analysesList">
+      <list>
+        <InsightAnalysis duration="5" href="https://insight.sensiolabs.com/api/projects/083222ad-0f97-4690-bae1-84db6e6dd083/analyses/2" nbViolations="58" nextGrade="BRONZE" number="2" reference="be41664d6cb63494436601835e7779168d4fe140" remediationCostForNextGrade="-1" status="finished" />
+        <InsightAnalysis href="https://insight.sensiolabs.com/api/projects/083222ad-0f97-4690-bae1-84db6e6dd083/analyses/1" number="1" reference="926e0ebf09baad10da56f49387d7c1013804f88b" remediationCostForNextGrade="-1" status="finished">
+          <option name="failed" value="true" />
+        </InsightAnalysis>
+      </list>
+    </option>
+  </component>
+</project>

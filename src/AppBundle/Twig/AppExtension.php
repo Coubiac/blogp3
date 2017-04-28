@@ -14,6 +14,7 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('resume', array($this, 'resumeFilter')),
+            new \Twig_SimpleFilter('rawdescr', array($this, 'rawdescrFilter'), array('is_safe' => array('html'))),
         );
     }
 
@@ -35,6 +36,11 @@ class AppExtension extends \Twig_Extension
         }
 
         return $retval;
+    }
+
+    public function rawdescrFilter($descr)
+    {
+        return $descr;
     }
     public function getName()
     {
