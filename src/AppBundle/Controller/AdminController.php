@@ -14,6 +14,7 @@ class AdminController extends Controller
     /**
      * View all Comments
      * @Route("/admin/comments", name="adminComments")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function viewComments()
     {
