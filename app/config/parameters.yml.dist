@@ -12,8 +12,9 @@ parameters:
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_user:       username@domain.com
+    mailer_password:   mypassword
+
 
     author: Jean Forteroche
     blogname: Billet Simple pour l'Alaska

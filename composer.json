@@ -1,10 +1,13 @@
 {
-  "name": "ben/.checkout",
+  "name": "begr/blogp3",
+  "description": "Blog pour le projet 3 Openclassrooms",
   "license": "proprietary",
   "type": "project",
   "autoload": {
     "psr-4": {
-      "": "src/"
+
+      "AppBundle\\": "src/AppBundle",
+      "UserBundle\\": "src/UserBundle"
     },
     "classmap": [
       "app/AppKernel.php",
@@ -13,6 +16,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+
       "Tests\\": "tests/"
     }
   },
@@ -32,9 +36,9 @@
     "stfalcon/tinymce-bundle": "~2.0",
     "stof/doctrine-extensions-bundle": "^1.2",
     "ensepar/html2pdf-bundle": "^3.0",
-    "friendsofsymfony/user-bundle": "dev-master",
     "symfony/options-resolver": "^3.2",
-    "knplabs/knp-time-bundle": "^1.7"
+    "knplabs/knp-time-bundle": "^1.7",
+    "friendsofsymfony/user-bundle": "^2.0"
   },
   "require-dev": {
     "sensio/generator-bundle": "^3.0",
