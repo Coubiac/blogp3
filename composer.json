@@ -14,6 +14,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "": "src/",
       "Tests\\": "tests/"
     }
   },
