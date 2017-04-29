@@ -7,6 +7,7 @@ use AppBundle\Entity\Comment;
 use AppBundle\Form\ArticleType;
 use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -108,7 +109,7 @@ class ArticleController extends Controller
 
     /**
      * Display form to add a NEW article
-     *
+     * @Method({"GET", "POST"})
      * @param Request $request
      * @Security("has_role('ROLE_ADMIN')")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
@@ -164,6 +165,7 @@ class ArticleController extends Controller
     /**
      * Displays a form to edit an existing Article entity.
      * @Security("has_role('ROLE_ADMIN')")
+     * @Method({"GET", "POST"})
      * @Route("/{slug}/edit", requirements={"id": "\d+"}, name="edit")
      */
     public function editAction(Article $article, Request $request)
@@ -193,6 +195,7 @@ class ArticleController extends Controller
     /**
      * Delete Article
      * @Route("/{slug}/delete", name="delete")
+     * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      *
      */
@@ -240,6 +243,7 @@ class ArticleController extends Controller
     /**
      * Display form to add a NEW comment
      * @Security("has_role('ROLE_USER')")
+     * @Method({"GET", "POST"})
      * @Route("/articles/{slug}/comments/add", name="addComment")
      *
      */
@@ -284,6 +288,7 @@ class ArticleController extends Controller
 
     /**
      * Display Form to reply to a comment
+     * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_USER')")
      * @Route("/articles/{slug}/comment/{id}/reply", name="replyComment")
      */
@@ -330,6 +335,7 @@ class ArticleController extends Controller
 
     /**
      * Signal a Admin
+     * @Method({"POST"})
      * @Route("articles/{slug}/comment/{id}/signal", name="signalComment")
      * @Security("has_role('ROLE_USER')")
      */

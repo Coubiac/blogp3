@@ -13,3 +13,38 @@ $(function () {
         return false;
     });
 });
+
+
+// script for datetimepicker
+jQuery.datetimepicker.setLocale('fr');
+jQuery('.datetimepicker').datetimepicker({
+    format: 'd/m/Y H:i'
+});
+
+//script for datatables
+$(document).ready(function () {
+    $('#myTable').dataTable({
+        "order": [[0, "desc"]],
+        "language": {
+            "url": "http://cdn.datatables.net/plug-ins/1.10.15/i18n/French.json"
+        }
+    });
+});
+// scrit for nav menu
+$("span.menu").click(function () {
+    $(".head-nav ul").slideToggle(300, function () {
+        // Animation complete.
+    });
+});
+
+//script for modals
+$(function () {
+    $("a.openmodal").click(function (e) {
+        e.preventDefault();
+
+        $("#modal .modal-content").load(this.href, function () {
+            $("#modal").modal();
+        })
+    })
+})
+

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class AdminController extends Controller
@@ -27,16 +28,17 @@ class AdminController extends Controller
     /**
      * Delete Comments
      * @Route("/admin/{id}/delete", name="deleteComment")
-     * @Method("GET")
+     * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function deleteCommentAction(Comment $comment)
+    public function deleteCommentAction(Comment $comment, Request $request)
     {
+        $referer = $request->headers->get('referer');
         $entityManager = $this->getDoctrine()->getManager();
 
         $entityManager->remove($comment);
         $entityManager->flush();
-        return $this->redirectToRoute('adminComments');
+        return $this->redirect($referer);
     }
 
     /**
@@ -57,7 +59,7 @@ class AdminController extends Controller
      * Delete Users
      *
      * @Route("/admin/users/{username}/delete", name="deleteUser")
-     * @Method("GET")
+     * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteUserAction(User $user)

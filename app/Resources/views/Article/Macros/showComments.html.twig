@@ -25,7 +25,15 @@
                 <a href="{{ path('signalComment', {'slug': comment.article.slug, 'id': comment.id}) }}" class="btn btn-default"><i class="fa fa-flag" aria-hidden="true"></i> Signaler</a>
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('deleteComment', {'id': comment.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>
+
+
+                    <form action="{{ url('deleteComment', {'id': comment.id}) }}" method="post" data-confirmation="true" id="delete-form">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+                        <button type="submit" class="btn  btn-danger">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                             Supprimer
+                        </button>
+                    </form>
 
                 {% endif %}
                 </div>

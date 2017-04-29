@@ -25,7 +25,18 @@
                     <td>{{ user.comments|length  }}</td>
                     <td></td>
                     <td>
-                        <a href="{{ path('deleteUser', {'username': user.username}) }}" class="btn btn-danger" role="button" data-confirm="Etes-vous certain de vouloir supprimer cet utilisateur ?"><i class="glyphicon glyphicon-trash"></i></a>
+
+
+                        <form action="{{ url('deleteUser', {'username': user.username}) }}" method="post" data-confirmation="true">
+                            <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+                            <button type="submit" class="btn  btn-danger"  data-confirm="Etes-vous certain de vouloir supprimer cet utilisateur ?">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </form>
+
+
+
+
                     </td>
                 </tr>
             {% endfor %}
