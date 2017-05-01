@@ -8,11 +8,32 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
 
 class AdminController extends Controller
 {
+
+    /**
+     * Export all articles to PDF file
+     * @Route("/bookpdf", name="booktopdf")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @Method("GET")
+     */
+    public function bookToPdfAction()
+    {
+        $listArticles = $this->getDoctrine()->getRepository('AppBundle:Article')->findAllAsc();
+        $html = $this->renderView('Article/booktopdf.html.twig', ['listArticles' => $listArticles,]);
+        $htmltopdf = $this->get('html2pdf_factory')->create('P', 'A4', 'en', true, 'UTF-8', array(10, 15, 10, 15));
+        $htmltopdf->pdf->SetDisplayMode('real');
+        $htmltopdf->writeHTML($html);
+        $webroot = $this->getParameter('webroot');
+        $htmltopdf->Output($webroot . '/billet-simple-pour-l-alaska.pdf', 'F');
+        $response = array("code" => 100, "success" => true);
+
+        return new Response(json_encode($response));
+    }
+
     /**
      * View all Comments
      * @Route("/admin/comments", name="adminComments")

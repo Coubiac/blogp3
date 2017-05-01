@@ -7,7 +7,6 @@ use AppBundle\Entity\Comment;
 use AppBundle\Form\ArticleType;
 use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,23 +22,6 @@ class ArticleController extends Controller
      *==============   FONCTIONS PDF   =============================================================================
      * -------------------------------------------------------------------------------------------------------------
      */
-
-    /**
-     * Export all articles to PDF
-     * @Route("/bookpdf", name="booktopdf")
-     */
-    public function bookToPdfAction()
-    {
-        $listArticles = $this->getDoctrine()->getRepository('AppBundle:Article')->findAllAsc();
-        $html = $this->renderView('Article/booktopdf.html.twig', ['listArticles' => $listArticles,]);
-        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
-        $htmltopdf->pdf->SetDisplayMode('real');
-        $htmltopdf->writeHTML($html);
-        $htmltopdf->Output('billet-simple-pour-l-alaska.pdf');
-
-        return new Response();
-    }
-
 
     /**
      * Export Article to PDF
@@ -213,14 +195,11 @@ class ArticleController extends Controller
 
             $this->addFlash('success', 'Article Supprimé avec succès');
 
-            if ($referer == $this->get('router')->generate('view_article', array('slug' => $article->getSlug())))
-            {
+            if ($referer == $this->get('router')->generate('view_article', array('slug' => $article->getSlug()))) {
                 return $this->redirectToRoute('home');
-            }
-            else{
+            } else {
                 return $this->redirect($referer);
             }
-
 
 
         } else {

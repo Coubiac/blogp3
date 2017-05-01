@@ -8,6 +8,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    webroot: "%kernel.root_dir%/../web"
 
 framework:
     #esi:             ~
@@ -114,3 +115,4 @@ fos_user:
             enabled: true
         form:
             type: UserBundle\Form\RegistrationType
+
