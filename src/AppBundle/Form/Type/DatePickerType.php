@@ -11,6 +11,7 @@ class DatePickerType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
+        //On pré-paramètre le DateTimeType pour qu'il fonctionne avec DateTimePicker
         $resolver->setDefaults(array('required' => false,
             'widget' => 'single_text',
             'format' => 'dd/MM/yyyy HH:mm',
