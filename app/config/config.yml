@@ -9,6 +9,10 @@ imports:
 parameters:
     locale: fr
     webroot: "%kernel.root_dir%/../web"
+    upload_directory: '%kernel.root_dir%/../web/uploads'
+    avatar_directory: '%upload_directory%/avatars'
+    avatar_path: 'uploads/avatars/'
+
 
 framework:
     #esi:             ~
@@ -30,6 +34,7 @@ framework:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        name: 'BN'
     fragments:       ~
     http_method_override: true
     assets: ~
@@ -43,6 +48,7 @@ twig:
     globals:
         blogname: "%blogname%"
         author: "%author%"
+        avatars_path: "%avatar_path%"
 
 # Doctrine Configuration
 doctrine:
@@ -115,4 +121,5 @@ fos_user:
             enabled: true
         form:
             type: UserBundle\Form\RegistrationType
+
 

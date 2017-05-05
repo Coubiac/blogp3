@@ -17,7 +17,7 @@ class Comment
     /**
      * Nombres de niveaux de commentaires
      */
-    const NUM_LEVELS = 3;
+    const NUM_LEVELS = 4;
 
 
     /**

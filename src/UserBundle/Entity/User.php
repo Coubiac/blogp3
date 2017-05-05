@@ -7,6 +7,7 @@ use AppBundle\Entity\Comment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -15,10 +16,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  */
 class User extends BaseUser
 {
-    /**
-     * @ORM\OneToOne(targetEntity="UserBundle\Entity\Avatar", cascade={"remove","persist"})
-     */
-    private $avatar;
+
 
     /**
      * @ORM\Id
@@ -32,10 +30,34 @@ class User extends BaseUser
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\Image()
+     */
+    private $avatar;
+
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+
+
+
     public function __construct()
     {
         parent::__construct();
         $this->comments = new ArrayCollection();
+
 
     }
 
@@ -73,26 +95,4 @@ class User extends BaseUser
         return $this->comments;
     }
 
-    /**
-     * Set avatar
-     *
-     * @param \UserBundle\Entity\Avatar $avatar
-     *
-     * @return User
-     */
-    public function setAvatar(\UserBundle\Entity\Avatar $avatar = null)
-    {
-        $this->avatar = $avatar;
-        return $this;
-    }
-
-    /**
-     * Get avatar
-     *
-     * @return \UserBundle\Entity\Avatar
-     */
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
 }

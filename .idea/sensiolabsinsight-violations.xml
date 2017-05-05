@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis>
+  <link href="https://insight.sensiolabs.com/api/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26" rel="self" type="application/vnd.com.sensiolabs.insight+xml"/>
+  <link href="https://insight.sensiolabs.com/api/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26/status" rel="status" type="application/vnd.com.sensiolabs.insight+xml"/>
+  <link href="https://insight.sensiolabs.com/api/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9" rel="project" type="application/vnd.com.sensiolabs.insight+xml"/>
+  <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26" rel="self" type="text/html"/>
+  <status><![CDATA[finished]]></status>
+  <violations>
+    <violation severity="info" category="codestyle" ignored="false">
+      <line>15</line>
+      <resource><![CDATA[app/Resources/views/others/styles.html.twig]]></resource>
+      <title>Text files should end with a newline character</title>
+      <message><![CDATA[This file ends with no newline character. It won't render properly on a terminal, and it's considered a bad practice. Add a simple line feed as the last character to fix it.]]></message>
+      <context start-line="10" end-line="15"><![CDATA[      type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.datetimepicker.min.css') }}">]]></context>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813742" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="major" category="bugrisk" ignored="false">
+      <line>119</line>
+      <resource><![CDATA[src/UserBundle/Entity/Avatar.php]]></resource>
+      <title>Absolute path constants __DIR__ and __FILE__ should not be used</title>
+      <message><![CDATA[__DIR__ and __FILE__ constants may conflict with the Symfony resource overriding system]]></message>
+      <context start-line="114" end-line="124"><![CDATA[    }
+
+    protected function getUploadRootDir()
+    {
+        // On retourne le chemin relatif vers l'image pour notre code PHP
+        return __DIR__.'/../../../web/'.$this->getUploadDir();
+    }
+
+    public function getWebPath()
+    {
+        //On ne stocke pas le nom du fichier mais seulement son extension. Son nom est donc généré]]></context>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813737" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="codestyle" ignored="false">
+      <line>0</line>
+      <resource><![CDATA[src/AppBundle/Form]]></resource>
+      <title>Form types should be in Form/Type folders</title>
+      <message><![CDATA[A form type has been found outside Form/Type folder]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813740" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="codestyle" ignored="false">
+      <line>0</line>
+      <resource><![CDATA[src/AppBundle/Form]]></resource>
+      <title>Form types should be in Form/Type folders</title>
+      <message><![CDATA[A form type has been found outside Form/Type folder]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813734" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="codestyle" ignored="false">
+      <line>0</line>
+      <resource><![CDATA[src/UserBundle/Form]]></resource>
+      <title>Form types should be in Form/Type folders</title>
+      <message><![CDATA[A form type has been found outside Form/Type folder]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813739" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="codestyle" ignored="false">
+      <line>0</line>
+      <resource><![CDATA[src/UserBundle/Form]]></resource>
+      <title>Form types should be in Form/Type folders</title>
+      <message><![CDATA[A form type has been found outside Form/Type folder]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813744" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="codestyle" ignored="false">
+      <line>0</line>
+      <resource><![CDATA[src/UserBundle/Form]]></resource>
+      <title>Form types should be in Form/Type folders</title>
+      <message><![CDATA[A form type has been found outside Form/Type folder]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813738" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="security" ignored="false">
+      <line>0</line>
+      <title>Default session cookie's name should be changed.</title>
+      <message><![CDATA[The session cookie name is the default one, PHPSESSID. You should consider overwriting it thanks to session.name parameter (see the official documentation).]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813741" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="info" category="security" ignored="false">
+      <line>0</line>
+      <title>A route should always have a valid HTTP method</title>
+      <message><![CDATA[The route "articletopdf" should have a routing method (GET/POST/PUT). It is mandatory.]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813736" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="minor" category="bugrisk" ignored="false">
+      <line>0</line>
+      <title>The Symfony version should be the latest stable one</title>
+      <message><![CDATA[This project uses Symfony v3.2.7, which is not the latest release of the v3.2 branch. You should use the v3.2.8 instead to benefit from the latest bugfixes.]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813735" rel="self" type="text/html"/>
+    </violation>
+    <violation severity="info" category="architecture" ignored="false">
+      <line>0</line>
+      <resource><![CDATA[]]></resource>
+      <title>Deprecated class found in service definition</title>
+      <message><![CDATA[The event_dispatcher service uses the Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher class, which has been deprecated in Symfony 3.3. Use the Symfony\Component\EventDispatcher\EventDispatcher class instead.]]></message>
+      <context/>
+      <link href="https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/analyses/26?status=existing#518813743" rel="self" type="text/html"/>
+    </violation>
+  </violations>
+  <grades>
+    <entry><![CDATA[none]]></entry>
+    <entry><![CDATA[bronze]]></entry>
+    <entry><![CDATA[silver]]></entry>
+    <entry><![CDATA[gold]]></entry>
+    <entry><![CDATA[platinum]]></entry>
+  </grades>
+  <failed>false</failed>
+  <grade><![CDATA[bronze]]></grade>
+  <next-grade><![CDATA[silver]]></next-grade>
+  <begin-at><![CDATA[2017-05-02T14:58:19+0200]]></begin-at>
+  <end-at><![CDATA[2017-05-02T14:59:32+0200]]></end-at>
+  <duration>26</duration>
+  <number>26</number>
+  <altered>false</altered>
+  <remediation-cost>24.25</remediation-cost>
+  <nb-violations>11</nb-violations>
+  <reference><![CDATA[9e0fc9f296dc88a299cb1f936aff30772aa2a780]]></reference>
+  <launched-by><![CDATA[coubiac]]></launched-by>
+  <configuration>
+    <ignored-branches>
+      <branch><![CDATA[gh-pages]]></branch>
+    </ignored-branches>
+    <pre-composer-script/>
+    <post-composer-script/>
+    <working-directory/>
+    <php-version/>
+    <php-ini/>
+    <commit-failure-conditions>
+      <branch><![CDATA[project.severity.critical > 0]]></branch>
+      <branch><![CDATA[project.severity.major > 0]]></branch>
+    </commit-failure-conditions>
+    <global-excluded-dirs>
+      <dir><![CDATA[vendor]]></dir>
+      <dir><![CDATA[vendors]]></dir>
+      <dir><![CDATA[test]]></dir>
+      <dir><![CDATA[tests]]></dir>
+      <dir><![CDATA[Tests]]></dir>
+      <dir><![CDATA[spec]]></dir>
+      <dir><![CDATA[features]]></dir>
+      <dir><![CDATA[Fixtures]]></dir>
+      <dir><![CDATA[DataFixtures]]></dir>
+      <dir><![CDATA[var]]></dir>
+    </global-excluded-dirs>
+    <excluded-patterns>
+      <pattern><![CDATA[app/check.php]]></pattern>
+      <pattern><![CDATA[app/SymfonyRequirements.php]]></pattern>
+      <pattern><![CDATA[web/config.php]]></pattern>
+      <pattern><![CDATA[web/app_*.php]]></pattern>
+    </excluded-patterns>
+    <patterns>
+      <file>
+        <pattern><![CDATA[*.php]]></pattern>
+        <pattern><![CDATA[*.twig]]></pattern>
+        <pattern><![CDATA[*.xml]]></pattern>
+        <pattern><![CDATA[*.yml]]></pattern>
+        <pattern><![CDATA[*.yaml]]></pattern>
+        <pattern><![CDATA[*.ini]]></pattern>
+        <pattern><![CDATA[*.dist]]></pattern>
+        <pattern><![CDATA[*.sql]]></pattern>
+        <pattern><![CDATA[*.md]]></pattern>
+        <pattern><![CDATA[*.rst]]></pattern>
+        <pattern><![CDATA[composer.*]]></pattern>
+        <pattern><![CDATA[.gitignore]]></pattern>
+        <pattern><![CDATA[LICENSE]]></pattern>
+        <pattern><![CDATA[README]]></pattern>
+        <pattern><![CDATA[Makefile]]></pattern>
+        <pattern><![CDATA[.htaccess]]></pattern>
+      </file>
+      <php>
+        <pattern><![CDATA[*.php]]></pattern>
+      </php>
+      <twig>
+        <pattern><![CDATA[*.twig]]></pattern>
+      </twig>
+    </patterns>
+    <rules/>
+    <parameters>
+      <parameter name="project_type">12</parameter>
+    </parameters>
+    <env/>
+  </configuration>
+  <previous-analyses-references>
+    <analysis-reference number="26">9e0fc9f296dc88a299cb1f936aff30772aa2a780</analysis-reference>
+    <analysis-reference number="25">a0963108e957e333b0cca7c48d8d56d152dba19d</analysis-reference>
+    <analysis-reference number="24">1ffedef637997b3245a3a5a927857936fd1a8981</analysis-reference>
+    <analysis-reference number="23">d009e6a85f0f1578af20de560f13df21a847b9f2</analysis-reference>
+    <analysis-reference number="22">8a959b3d06b385b31187fe31c96f45b8b0191b36</analysis-reference>
+    <analysis-reference number="21">cb863f3d46f5e524056089e613565337551f8c84</analysis-reference>
+    <analysis-reference number="20">6261d66f465fc6a182f4a23e5ec1a04c5ed44c38</analysis-reference>
+    <analysis-reference number="19">9996c7c873818c65cdc0d5962b5347b76c585d45</analysis-reference>
+    <analysis-reference number="18">a9f9b67e5dea179460144ce1e01972b675b93a0d</analysis-reference>
+    <analysis-reference number="17">a9f9b67e5dea179460144ce1e01972b675b93a0d</analysis-reference>
+    <analysis-reference number="16">a9f9b67e5dea179460144ce1e01972b675b93a0d</analysis-reference>
+    <analysis-reference number="15">b10583f08c198a45ac465850553903c424380c8e</analysis-reference>
+    <analysis-reference number="14">3facf60896e6b46e0b409c3543dedcf32aadfe02</analysis-reference>
+    <analysis-reference number="13">be0794896b732f770d25475fc3549de83b436171</analysis-reference>
+    <analysis-reference number="12">a7d5ea14aa2e6c28e81a822d885eea9123c244a7</analysis-reference>
+    <analysis-reference number="11">f3b06c6041fd79bfe5272d81e33e722f37276ab6</analysis-reference>
+    <analysis-reference number="10">8ecabc7aa4b4b57328f54f5d515aa22c147f056e</analysis-reference>
+    <analysis-reference number="9">ef10c46598a6b1c351e2076e6632f0f29ca411fc</analysis-reference>
+    <analysis-reference number="8">659bfd2dea325147897e0a6dcee1e7961387dcd1</analysis-reference>
+    <analysis-reference number="7">1aaa2adb2c12f4fbeadecd46af2626cf7018a7a7</analysis-reference>
+    <analysis-reference number="6">0558e259bd968cb3cce307051f159610f0e38a95</analysis-reference>
+    <analysis-reference number="5">bbd31a46296f960499f689a01f11a44c0dc0a2d8</analysis-reference>
+    <analysis-reference number="4">5eb5c7f6dd9cdcf33568e7d9f26c0273f9e58f9c</analysis-reference>
+    <analysis-reference number="3">c4b1c9e9e8f1fb4b9b199029268b76976da58bcb</analysis-reference>
+    <analysis-reference number="2">240a3304dd6a58c0bfa64c171a13ca2bb3f43f86</analysis-reference>
+  </previous-analyses-references>
+  <nb-violations-new>0</nb-violations-new>
+  <nb-violations-existing>11</nb-violations-existing>
+  <nb-violations-fixed>10</nb-violations-fixed>
+  <nb-violations-ignored>0</nb-violations-ignored>
+</analysis>
