@@ -3,9 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
-use AppBundle\Entity\Comment;
 use AppBundle\Form\ArticleType;
-use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -16,33 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 class ArticleController extends Controller
 {
 
-
-    /**
-     * -------------------------------------------------------------------------------------------------------------
-     *==============   FONCTIONS PDF   =============================================================================
-     * -------------------------------------------------------------------------------------------------------------
-     */
-
-    /**
-     * Export Article to PDF
-     * @Route("/{slug}/pdf", requirements={"id": "\d+"}, name="articletopdf")
-     * @Method("GET")
-     */
-    public function pdfAction(Article $article)
-    {
-        $html = $this->renderView('Article/articleToPdf.html.twig', ['article' => $article,]);
-        $htmltopdf = new \HTML2PDF('P', 'A4', 'fr', array(50, 50, 50, 50));
-        $htmltopdf->pdf->SetDisplayMode('real');
-        $htmltopdf->writeHTML($html);
-        $htmltopdf->Output($article->getSlug() . '.pdf');
-
-        return new Response();
-
-    }
-
     /**
      *--------------------------------------------------------------------------------------------------------------
-     *==============   GESTION DES ARTICLES   ======================================================================
+     *==============   PARTIE PUBLIQUE   ======================================================================
      * -------------------------------------------------------------------------------------------------------------
      */
 
@@ -91,6 +65,48 @@ class ArticleController extends Controller
     }
 
     /**
+     * Display article content
+     * @Route("/article/{slug}", name="view_article")
+     * @Method("GET")
+     */
+    public function viewAction(Article $article)
+    {
+        $listeComments = $this->getDoctrine()->getRepository("AppBundle:Comment")->findBy(
+            array('article' => $article, 'level' => 1)
+        );
+
+
+        return $this->render(
+            'article/view.html.twig',
+            array(
+                'comments' => $listeComments,
+                'article' => $article,
+
+
+            )
+        );
+    }
+
+
+    /**
+     *--------------------------------------------------------------------------------------------------------------
+     *==============   PARTIE ADMIN   ======================================================================
+     * -------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * view all articles on admin page
+     * @Route("/admin/articles", name="adminArticles")
+     * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function viewArticlesAction()
+    {
+        $listArticles = $this->getDoctrine()->getRepository("AppBundle:Article")->findAll();
+        return $this->render('Admin/articles.html.twig', array('listArticles' => $listArticles));
+    }
+
+    /**
      * Display form to add a NEW article
      * @Method({"GET", "POST"})
      * @param Request $request
@@ -118,29 +134,6 @@ class ArticleController extends Controller
             'article/add.html.twig',
             array(
                 'form' => $form->createView(),
-            )
-        );
-    }
-
-    /**
-     * Display article content
-     * @Route("/article/{slug}", name="view_article")
-     * @Method("GET")
-     */
-    public function viewAction(Article $article)
-    {
-        $listeComments = $this->getDoctrine()->getRepository("AppBundle:Comment")->findBy(
-            array('article' => $article, 'level' => 1)
-        );
-
-
-        return $this->render(
-            'article/view.html.twig',
-            array(
-                'comments' => $listeComments,
-                'article' => $article,
-
-
             )
         );
     }
@@ -211,124 +204,6 @@ class ArticleController extends Controller
         }
 
 
-    }
-
-    /**
-     *--------------------------------------------------------------------------------------------------------------
-     *==============   GESTION DES COMMENTAIRES   ==================================================================
-     * -------------------------------------------------------------------------------------------------------------
-     */
-
-
-    /**
-     * Display form to add a NEW comment
-     * @Security("has_role('ROLE_USER')")
-     * @Method({"GET", "POST"})
-     * @Route("/articles/{slug}/comments/add", name="addComment")
-     *
-     */
-    public function addCommentAction(Article $article, Request $request)
-    {
-        $comment = new Comment();
-        $comment->setArticle($article)->setAuthor($this->get('security.token_storage')->getToken()->getUser());
-        $form = $this->createForm(CommentType::class, $comment, array(
-            'action' => $this->generateUrl('addComment', array(
-                'slug' => $article->getSlug()))));
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $checkAntispam = $this->get('app.antispam')->isSpam($comment->getContent());
-            if ($checkAntispam['spam']) {
-                $request->getSession()->getFlashbag()->add('danger', $checkAntispam['message']);
-                return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
-
-            } else {
-
-                $comment->setContent($checkAntispam['content']);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($comment);
-                $em->flush();
-                $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
-
-                return $this->redirectToRoute('view_article', array('slug' => $article->getSlug()));
-            }
-        }
-
-        return $this->render(
-            'Article/commentForm.html.twig',
-            [
-                'article' => $article,
-
-                'form' => $form->createView(),
-            ]
-        );
-
-    }
-
-    /**
-     * Display Form to reply to a comment
-     * @Method({"GET", "POST"})
-     * @Security("has_role('ROLE_USER')")
-     * @Route("/articles/{slug}/comment/{id}/reply", name="replyComment")
-     */
-    public function replyCommentAction(Comment $parent, Request $request)
-    {
-        $comment = new Comment();
-        $comment
-            ->setParent($parent)
-            ->setAuthor($this
-                ->get('security.token_storage')
-                ->getToken()->getUser())
-            ->setArticle($parent->getArticle());
-
-
-        $form = $this->createForm(CommentType::class, $comment, array(
-            'action' => $this->generateUrl('replyComment', array(
-                'slug' => $comment->getArticle()->getSlug(),
-                'id' => $parent->getId()))));
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $checkAntispam = $this->get('app.antispam')->isSpam($comment->getContent());
-            if ($checkAntispam['spam']) {
-                $request->getSession()->getFlashbag()->add('danger', $checkAntispam['message']);
-                return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
-
-            } else {
-                $comment->setContent($checkAntispam['content']);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($comment);
-                $em->flush();
-                $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
-                return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
-            }
-        }
-        return $this->render(
-            'Article/commentForm.html.twig',
-            [
-                'article' => $comment->getArticle(),
-                'form' => $form->createView(),
-            ]
-        );
-    }
-
-    /**
-     * Signal a Admin
-     * @Method({"POST"})
-     * @Route("articles/{slug}/comment/{id}/signal", name="signalComment")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function signalCommentAction(Comment $comment, Request $request)
-    {
-        $nbSignaled = $comment->getSignaled();
-        $nbSignaled++;
-        $comment->setSignaled($nbSignaled);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($comment);
-        $em->flush();
-        $request->getSession()->getFlashbag()->add('success', 'Le commentaire a bien été enregistré');
-        return $this->redirectToRoute('view_article', array('slug' => $comment->getArticle()->getSlug()));
     }
 
 

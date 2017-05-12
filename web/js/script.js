@@ -48,7 +48,7 @@ $(function () {
     })
 });
 
-//script for ajax
+//script for ajax with get method
 $(document).ready(function() {
     $('a.ajax').on('click', function(e){
         e.preventDefault();
@@ -56,13 +56,15 @@ $(document).ready(function() {
         $.get(route,
             function(response){
                 if(response.code === 100 && response.success){
-                    document.getElementById("flash").innerHTML = '<div class="alert alert-success alert-dismissible fade in text-center" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Le livre a bien été créé</div>';
+                    document.getElementById("flash").innerHTML = "<div class='alert alert-success alert-dismissible fade in text-center' role='alert'><button type='button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>" + response.message + "</div>";
                 }
                 else
                 {
-                    document.getElementById("flash").innerHTML = '<div class="alert alert-danger alert-dismissible fade in text-center" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Une erreur est survenue pendant la génération du livre</div>';
+                    document.getElementById("flash").innerHTML = '<div class="alert alert-danger alert-dismissible fade in text-center" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Une erreur est survenue</div>';
                 }
 
             }, "json");
     })
 });
+
+
