@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -51,7 +51,7 @@ class UserController extends Controller
      * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function promoteUser(User $user)
+    public function promoteUserAction(User $user)
     {
         $entityManager = $this->getDoctrine()->getManager();
         if (!$user->isSuperAdmin() AND !$user->hasRole("ROLE_ADMIN")) // Un super Admin a déja les permissions maximales
@@ -71,7 +71,7 @@ class UserController extends Controller
      * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function demoteUser(User $user)
+    public function demoteUserAction(User $user)
     {
         $entityManager = $this->getDoctrine()->getManager();
         if (!$user->isSuperAdmin()) // On ne touche pas aux super admins
