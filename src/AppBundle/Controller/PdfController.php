@@ -13,13 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class PdfController extends Controller
 {
     /**
-     * -------------------------------------------------------------------------------------------------------------
-     *==============   FONCTIONS PDF   =============================================================================
-     * -------------------------------------------------------------------------------------------------------------
-     */
-
-    /**
-     * Export Article to PDF
+     * Export one Article to PDF
      * @Route("/{slug}/pdf", requirements={"id": "\d+"}, name="articletopdf")
      * @Method("GET")
      */
