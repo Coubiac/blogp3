@@ -54,7 +54,7 @@ class UserController extends Controller
     public function promoteUserAction(User $user)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        if (!$user->isSuperAdmin() AND !$user->hasRole("ROLE_ADMIN")) // Un super Admin a déja les permissions maximales
+        if (!$user->isSuperAdmin() && !$user->hasRole("ROLE_ADMIN")) // Un super Admin a déja les permissions maximales
         {
             $user->addRole("ROLE_ADMIN");
             $entityManager->persist($user);

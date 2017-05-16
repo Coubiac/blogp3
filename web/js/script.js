@@ -1,4 +1,4 @@
-//Fonction pour générer une fenêtre de confirmation
+//Fonction pour générer une fenêtre de confirmation à partir d'un lien
 $(function () {
     $('a[data-confirm]').click(function (ev) {
         var href = $(this).attr('href');
