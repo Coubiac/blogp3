@@ -1,3 +1,5 @@
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9/big.png)](https://insight.sensiolabs.com/projects/95ea8650-0e31-4955-bcde-cd5a01bbf8d9)
+
 Blog P3
 =========
 
