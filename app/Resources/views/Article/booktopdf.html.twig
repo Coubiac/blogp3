@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ blogname }}</title>
-</head>
-<body>
-<div style="display:flex;margin:auto;"><H1 style="align:center;">{{ blogname }}</H1>
-    <h3 style="align:center;">{{ author }}</h3></div>
 <page>
+    <h1>{{ blogname }}</h1>
+    <h2>{{ author }}</h2>
+</page>
+<page>
+
 </page>
 {% for article in listArticles %}
 
@@ -14,16 +11,12 @@
         <bookmark title="{{ article.title }}" level="0"></bookmark>
         <h2>{{ article.title }}</h2>
         <i>le {{ article.date|date('d/m/Y') }}</i>
-
-
         {{ article.content|rawdescr }}
 
-
         <page_footer>
+
             [[page_cu]]/[[page_nb]]
         </page_footer>
 
     </page>
 {% endfor %}
-</body>
-</html>

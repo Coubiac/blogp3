@@ -18,7 +18,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="col-md-7 catagerious2">
-                <h4>{{ comment.content }}</h4>
+                <h4>{{ comment.content|nl2br }}</h4>
                 <div class="btn btn-group">
 
                 {% if comment.level < constant('\\AppBundle\\Entity\\Comment::NUM_LEVELS') %}<a href="{{ path('replyComment', {'slug': comment.article.slug, 'id': comment.id}) }}" class="btn btn-default openmodal"><i class="fa fa-reply" aria-hidden="true"></i> Répondre

@@ -51,9 +51,9 @@
                         {% endif %}
 
                         {% if 'ROLE_SUPER_ADMIN' not in user.roles %}
-                        <form action="{{ url('deleteUser', {'username': user.username}) }}" method="post" data-confirmation="true">
+                        <form action="{{ url('deleteUser', {'username': user.username}) }}" id="delete" method="post" data-confirmation="true">
                             <input type="hidden" name="token" value="{{ csrf_token('delete') }}"/>
-                            <button type="submit" class="btn  btn-danger ajaxpost"
+                            <button type="submit" class="btn  btn-danger ajaxpost submitbtn"
                                     data-confirm="Etes-vous certain de vouloir supprimer cet utilisateur ?">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>

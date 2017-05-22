@@ -42,6 +42,7 @@ class PdfController extends Controller
         $htmltopdf = $this->get('html2pdf_factory')->create('P', 'A4', 'en', true, 'UTF-8', array(10, 15, 10, 15));
         $htmltopdf->pdf->SetDisplayMode('real');
         $htmltopdf->writeHTML($html);
+        $htmltopdf->createIndex('Sommaire', 20, 15, true, true, 2);
         $webroot = $this->getParameter('webroot');
         $htmltopdf->Output($webroot . '/billet-simple-pour-l-alaska.pdf', 'F');
         $response = array("code" => 100, "success" => true, "message" => 'La génération du PDF est terminée');

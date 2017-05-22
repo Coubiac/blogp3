@@ -79,8 +79,7 @@ class CommentController extends Controller
             ->setParent($parent)
             ->setAuthor($this
                 ->get('security.token_storage')
-                ->getToken()->getUser())
-            ->setArticle($parent->getArticle());
+                ->getToken()->getUser());
 
 
         $form = $this->createForm(CommentType::class, $comment, array(

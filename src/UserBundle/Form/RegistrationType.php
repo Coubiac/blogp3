@@ -13,7 +13,7 @@ class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('avatar', FileType::class, array('label' => 'Avatar (Fichier Image)'));
+        $builder->add('avatar', FileType::class, array('label' => 'Avatar (Fichier Image)', 'required' => false));
 
     }
     public function configureOptions(OptionsResolver $resolver)
