@@ -2,11 +2,13 @@
     {% import _self as self %}
     {% for comment in commentaires %}
         {% set decalage = comment.level - 1 %}
+
         <div class="catagerious">
+
             <div class="col-md-offset-{{ decalage }} col-md-2 catagerious1">
                 <div class="catagerious-left">
                     {% if comment.author.avatar %}
-                            <img src="{{ asset(comment.author.avatar.webPath) }}" class="img-responsive" alt="{{ comment.author.avatar.alt }}"/>
+                            <img src="{{ asset(avatars_path ~ comment.author.avatar) }}" class="img-responsive" alt="{{ comment.author.username }}"/>
                   {% endif %}
                 </div>
                 <div class="catagerious-right">
@@ -15,8 +17,8 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div class="col-md-8 catagerious2">
-                <h4>{{ comment.content }}</h4>
+            <div class="col-md-7 catagerious2">
+                <h4>{{ comment.content|nl2br }}</h4>
                 <div class="btn btn-group">
 
                 {% if comment.level < constant('\\AppBundle\\Entity\\Comment::NUM_LEVELS') %}<a href="{{ path('replyComment', {'slug': comment.article.slug, 'id': comment.id}) }}" class="btn btn-default openmodal"><i class="fa fa-reply" aria-hidden="true"></i> Répondre
@@ -25,7 +27,15 @@
                 <a href="{{ path('signalComment', {'slug': comment.article.slug, 'id': comment.id}) }}" class="btn btn-default"><i class="fa fa-flag" aria-hidden="true"></i> Signaler</a>
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('deleteComment', {'id': comment.id}) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>
+
+
+                    <form action="{{ url('deleteComment', {'id': comment.id}) }}" method="post" data-confirmation="true" id="delete-form">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+                        <button type="submit" class="btn  btn-danger">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                             Supprimer
+                        </button>
+                    </form>
 
                 {% endif %}
                 </div>

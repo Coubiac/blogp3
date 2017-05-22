@@ -21,3 +21,15 @@ services:
 
     app.antispam:
         class: AppBundle\Antispam\Antispam
+
+    app.file_uploader:
+            class: AppBundle\FileUploader\FileUploader
+            arguments: ['%avatar_directory%']
+
+    app.doctrine_avatar_listener:
+            class: UserBundle\EventListener\AvatarUploadListener
+            arguments: ['@app.file_uploader']
+            tags:
+                - { name: doctrine.event_listener, event: prePersist }
+                - { name: doctrine.event_listener, event: preUpdate }
+

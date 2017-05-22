@@ -15,17 +15,51 @@
             <tbody>
             {% for user in listUsers %}
                 <tr>
-                    <td>{{ user.username }}</td>
+                    <td><strong>{{ user.username }}</strong>
+                    </td>
                     <td>{{ user.email }}</td>
-                    <td><ul>
+                    <td>
+                        <ul>
                             {% for role in user.roles %}
                                 <li>{{ role }}</li>
                             {% endfor %}
-                        </ul></td>
-                    <td>{{ user.comments|length  }}</td>
-                    <td></td>
+                        </ul>
+                    </td>
+                    <td>{{ user.comments|length }}</td>
                     <td>
-                        <a href="{{ path('deleteUser', {'username': user.username}) }}" class="btn btn-danger" role="button" data-confirm="Etes-vous certain de vouloir supprimer cet utilisateur ?"><i class="glyphicon glyphicon-trash"></i></a>
+
+                    </td>
+                    <td>
+                        {% if ('ROLE_ADMIN' not in user.roles) and ('ROLE_SUPER_ADMIN' not in user.roles) %}
+                        <form action="{{ url('promoteUser', {'username': user.username}) }}" method="post" data-confirmation="true">
+                            <input type="hidden" name="token" value="{{ csrf_token('promote') }}" class="{{ user.username }}" />
+                            <button type="submit" class="btn  btn-success ajaxpost"
+                                    data-confirm="Etes-vous certain de vouloir promouvoir cet utilisateur ?">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                        <form action="{{ url('demoteUser', {'username': user.username}) }}" method="post" data-confirmation="true">
+                            <input type="hidden" name="token" value="{{ csrf_token('promote') }}"/>
+                            <button type="submit" class="btn  btn-success ajaxpost"
+                                    data-confirm="Cet administrateur redeviendra simple utilisateur. Etes vous sur ?">
+                                <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        {% if 'ROLE_SUPER_ADMIN' not in user.roles %}
+                        <form action="{{ url('deleteUser', {'username': user.username}) }}" id="delete" method="post" data-confirmation="true">
+                            <input type="hidden" name="token" value="{{ csrf_token('delete') }}"/>
+                            <button type="submit" class="btn  btn-danger ajaxpost submitbtn"
+                                    data-confirm="Etes-vous certain de vouloir supprimer cet utilisateur ?">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+
                     </td>
                 </tr>
             {% endfor %}

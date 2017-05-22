@@ -6,14 +6,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use UserBundle\Entity\User;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 
 class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('avatar', AvatarType::class); // valeur par défaut = l'url précédent l'affichage du formulaire;
+        $builder->add('avatar', FileType::class, array('label' => 'Avatar (Fichier Image)', 'required' => false));
+
     }
     public function configureOptions(OptionsResolver $resolver)
     {
