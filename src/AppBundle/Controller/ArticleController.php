@@ -77,7 +77,7 @@ class ArticleController extends Controller
 
 
         return $this->render(
-            'article/view.html.twig',
+            'Article/view.html.twig',
             array(
                 'comments' => $listeComments,
                 'article' => $article,
