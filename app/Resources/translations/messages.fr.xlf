@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>Title</source>
+                <target>Titre</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Content</source>
+                <target>Contenu</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Date</source>
+                <target>Date</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Date</source>
+                <target>Date</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Mail</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>Username</source>
+                <target>Nom d'utilisateur</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>Password</source>
+                <target>Date</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Confirm password</source>
+                <target>Confirmez le mot de passe</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Avatar (Image File)</source>
+                <target>Avatar (Fichier Image)</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

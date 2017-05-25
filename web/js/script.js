@@ -13,15 +13,7 @@ $(function () {
         return false;
     });
 });
-//Fonction pour générer une fenêtre de confirmation à partir d'une requette POST
-$(function() {
-    $('form[data-confirmation="true"]').submit(function(e){
-        e.preventDefault();
-        if (confirm("Êtes vous sur ?")){
-            $(this).submit();
-        }
-    })
-});
+
 
 // script for datetimepicker
 jQuery.datetimepicker.setLocale('fr');

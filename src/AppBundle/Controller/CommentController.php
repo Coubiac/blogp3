@@ -158,7 +158,7 @@ class CommentController extends Controller
     /**
      * Delete Comments
      * @Route("/admin/{id}/delete", name="deleteComment")
-     * @Method("POST")
+     * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteCommentAction(Comment $comment, Request $request)
@@ -168,8 +168,25 @@ class CommentController extends Controller
 
         $entityManager->remove($comment);
         $entityManager->flush();
+        $request->getSession()->getFlashbag()->add('success', 'Le commentaire a été Supprimé');
         return $this->redirect($referer);
     }
+
+    /**
+     * Unsignal
+     * @Method({"GET"})
+     * @Route("/admin/{id}/unsignal", name="unsignalComment")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function unsignalCommentAction(Comment $comment, Request $request)
+    {
+        $referer = $request->headers->get('referer');
+        $comment->setSignaled('0');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($comment);
+        $em->flush();
+        $request->getSession()->getFlashbag()->add('success', 'Le commentaire a été validé');
+        return $this->redirect($referer);}
 
 
 }

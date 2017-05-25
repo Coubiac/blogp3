@@ -9,7 +9,7 @@
                     <th>Article</th>
                     <th>Utilisateur</th>
                     <th>Commentaire</th>
-                    <th>Supprimer</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -23,7 +23,8 @@
                         <td>{{ comment.author.username }}</td>
                         <td>{{ comment.content }}</td>
                         <td>
-                            <a href="{{ path('deleteComment', {'id': comment.id}) }}" class="btn btn-danger" role="button" data-confirm="Etes-vous certain de vouloir supprimer ce commentaire ?"><i class="glyphicon glyphicon-trash"></i> Supprimer</a>
+                            <a href="{{ path('deleteComment', {'id': comment.id}) }}" class="btn btn-danger" role="button" data-confirm="Etes-vous certain de vouloir supprimer ce commentaire ?"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a href="{{ path('unsignalComment', {'id': comment.id}) }}" class="btn btn-success" role="button" data-confirm="Etes-vous certain de vouloir valider ce commentaire ?"><i class="glyphicon glyphicon-ok"></i></a>
                         </td>
                     </tr>
                  {% endfor %}

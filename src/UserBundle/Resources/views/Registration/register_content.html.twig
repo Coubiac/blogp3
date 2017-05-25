@@ -5,16 +5,16 @@
                 <h1>Enregistrez vous !</h1><br>
 
                 <form>
-                    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'E-mail' } }) }}
+                    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Mail' } }) }}
                     {{ form_errors(form.email) }}
 
-                    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'nom d\'utilisateur' } }) }}
+                    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'Username' } }) }}
                     {{ form_errors(form.username) }}
 
-                    {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control', 'placeholder': 'Mot de passe' } }) }}
+                    {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control', 'placeholder': 'Password' } }) }}
                     {{ form_errors(form.plainPassword.first) }}
 
-                    {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control', 'placeholder': 'Confirmation du mot de passe' } }) }}
+                    {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control', 'placeholder': 'Confirm password' } }) }}
                     {{ form_errors(form.plainPassword.second) }}
 
                     {{ form_row(form.avatar) }}

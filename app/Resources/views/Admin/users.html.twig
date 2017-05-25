@@ -31,30 +31,27 @@
                     </td>
                     <td>
                         {% if ('ROLE_ADMIN' not in user.roles) and ('ROLE_SUPER_ADMIN' not in user.roles) %}
-                        <form action="{{ url('promoteUser', {'username': user.username}) }}" method="post" data-confirmation="true">
+                        <form action="{{ url('promoteUser', {'username': user.username}) }}" method="post" data-confirmation="true" onsubmit="return confirm('Etes-vous certain de vouloir promouvoir cet utilisateur ?');">
                             <input type="hidden" name="token" value="{{ csrf_token('promote') }}" class="{{ user.username }}" />
-                            <button type="submit" class="btn  btn-success ajaxpost"
-                                    data-confirm="Etes-vous certain de vouloir promouvoir cet utilisateur ?">
+                            <button type="submit" class="btn  btn-success ajaxpost">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </button>
                         </form>
                         {% endif %}
 
                         {% if 'ROLE_ADMIN' in user.roles %}
-                        <form action="{{ url('demoteUser', {'username': user.username}) }}" method="post" data-confirmation="true">
+                        <form action="{{ url('demoteUser', {'username': user.username}) }}" method="post" data-confirmation="true" onsubmit="return confirm('Cet administrateur redeviendra simple utilisateur. Etes vous sur ?');">
                             <input type="hidden" name="token" value="{{ csrf_token('promote') }}"/>
-                            <button type="submit" class="btn  btn-success ajaxpost"
-                                    data-confirm="Cet administrateur redeviendra simple utilisateur. Etes vous sur ?">
+                            <button type="submit" class="btn  btn-success ajaxpost">
                                 <i class="fa fa-minus" aria-hidden="true"></i>
                             </button>
                         </form>
                         {% endif %}
 
                         {% if 'ROLE_SUPER_ADMIN' not in user.roles %}
-                        <form action="{{ url('deleteUser', {'username': user.username}) }}" id="delete" method="post" data-confirmation="true">
+                        <form action="{{ url('deleteUser', {'username': user.username}) }}" id="delete" method="post" data-confirmation="true" onsubmit="return confirm('Etes-vous certain de vouloir supprimer cet utilisateur ?');">
                             <input type="hidden" name="token" value="{{ csrf_token('delete') }}"/>
-                            <button type="submit" class="btn  btn-danger ajaxpost submitbtn"
-                                    data-confirm="Etes-vous certain de vouloir supprimer cet utilisateur ?">
+                            <button type="submit" class="btn  btn-danger ajaxpost submitbtn">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </form>
