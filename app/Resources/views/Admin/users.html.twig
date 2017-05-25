@@ -27,7 +27,7 @@
                     </td>
                     <td>{{ user.comments|length }}</td>
                     <td>
-
+                        {{ user.lastLogin|ago }}
                     </td>
                     <td>
                         {% if ('ROLE_ADMIN' not in user.roles) and ('ROLE_SUPER_ADMIN' not in user.roles) %}

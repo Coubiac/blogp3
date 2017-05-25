@@ -114,7 +114,7 @@ class CommentController extends Controller
 
     /**
      * Signal a Admin
-     * @Method({"POST"})
+     * @Method({"GET"})
      * @Route("articles/{slug}/comment/{id}/signal", name="signalComment")
      * @Security("has_role('ROLE_USER')")
      */

@@ -54,12 +54,6 @@
                         Commenter
                     </a>
                 {% endif %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('delete', {'slug': article.slug}) }}" class="btn btn-danger">
-                        <i class="glyphicon glyphicon-trash"></i>
-                        Supprimer l'article
-                    </a>
-                {% endif %}
             </div>
             {{ macro.afficherCommentaires(comments) }}
         </div>
